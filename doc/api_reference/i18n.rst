@@ -1,0 +1,5 @@
+*****************
+sudoku_react.i18n
+*****************
+
+.. automodule:: sudoku_react.i18n
