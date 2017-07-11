@@ -18,7 +18,7 @@ extensions = [
 
 # Add local extension(s).
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "_extension"))
-extensions.append("javascript_reference")
+extensions.append("mdn_reference")
 
 # The suffix of source file names.
 source_suffix = ".rst"
