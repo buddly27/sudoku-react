@@ -52,8 +52,8 @@ export default function createRoutes(store) {
             name: "not_found",
             getComponent(nextState, cb) {
                 System.import("sudoku_react/container/not_found/index")
-                .then(loadModule(cb))
-                .catch(errorLoading);
+                    .then(loadModule(cb))
+                    .catch(errorLoading);
             },
         },
     ];
