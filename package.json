@@ -222,8 +222,7 @@
             ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/resource/testing/mocks/image.js"
         },
         "setupTestFrameworkScriptFile": "<rootDir>/resource/testing/test_bundler.js",
-        "testPathDirs":["test"],
-        "testRegex": "test_.*\\.js$"
+        "testRegex": "./test/.*\\.test\\.js$"
     },
     "dependencies": {
         "babel-polyfill": "6.23.0",
