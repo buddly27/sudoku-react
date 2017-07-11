@@ -132,7 +132,7 @@ function dependencyHandlers() {
             new webpack.DllReferencePlugin(
                 {
                     context: process.cwd(),
-                     // eslint-disable-next-line global-require, import/no-dynamic-require
+                    // eslint-disable-next-line global-require, import/no-dynamic-require
                     manifest: require(manifestPath),
                 }
             ),
@@ -142,7 +142,7 @@ function dependencyHandlers() {
     // If DLLs are explicitly defined, automatically create a DLLReferencePlugin
     // for each of them.
     const dllManifests = Object.keys(dllPlugin.dlls)
-    .map((name) => path.join(dllPath, `/${name}.json`));
+        .map((name) => path.join(dllPath, `/${name}.json`));
 
     return dllManifests.map(
         (manifestPath) => {
