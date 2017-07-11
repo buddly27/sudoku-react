@@ -35,7 +35,6 @@ import {makeSelectLocale} from "./selector";
  */
 // eslint-disable-next-line react/prefer-stateless-function
 export class LanguageProvider extends React.Component {
-
     render() {
         return (
             <IntlProvider
@@ -53,8 +52,8 @@ export class LanguageProvider extends React.Component {
  * Expected types for *props*.
  */
 LanguageProvider.propTypes = {
-    locale: PropTypes.string,
-    messages: PropTypes.object,
+    locale: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired,
     children: PropTypes.element.isRequired,
 };
 

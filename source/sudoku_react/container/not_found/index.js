@@ -26,7 +26,6 @@ import message from "./message";
  */
 // eslint-disable-next-line react/prefer-stateless-function
 export default class NotFound extends React.Component {
-
     render() {
         return (
             <h1>
