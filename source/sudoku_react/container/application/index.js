@@ -5,6 +5,19 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+import AppBar from "material-ui/AppBar";
+
+
+const Title = styled.h1`
+    padding: 5px 30px;
+    margin: 0px;
+`;
+
+
+const Content = styled.div`
+    padding: 50px;
+`;
 
 
 /**
@@ -28,20 +41,27 @@ import PropTypes from "prop-types";
  */
 // eslint-disable-next-line react/prefer-stateless-function
 export default class Application extends React.Component {
-
     /**
      * Expected types for *props*.
      */
     static propTypes = {
-        children: PropTypes.node,
+        children: PropTypes.node.isRequired,
     };
 
+    /**
+     * Render the component.
+     */
     render() {
         const {children} = this.props;
 
         return (
             <div>
-                {React.Children.toArray(children)}
+                <AppBar>
+                    <Title>Sudoku Game</Title>
+                </AppBar>
+                <Content>
+                    {React.Children.toArray(children)}
+                </Content>
             </div>
         );
     }
