@@ -237,6 +237,7 @@
         "ip": "1.1.5",
         "lodash": "4.17.4",
         "minimist": "1.2.0",
+        "material-ui": "^1.0.0-alpha.21",
         "prop-types": "15.5.10",
         "react": "15.6.1",
         "react-dom": "15.6.1",
@@ -249,7 +250,9 @@
         "redux-immutable": "4.0.0",
         "redux-saga": "0.15.4",
         "reselect": "3.0.1",
+        "styled-components": "1.1.2",
         "sanitize.css": "5.0.0",
+        "typeface-roboto": "0.0.31",
         "warning": "3.0.0"
     },
     "devDependencies": {
