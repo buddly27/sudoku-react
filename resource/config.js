@@ -16,8 +16,8 @@ const ReactBoilerplate = {
      */
     dllPlugin: {
         defaults: {
-             // Exclude dependencies not intended for the browser by listing
-             // them here.
+            // Exclude dependencies not intended for the browser by listing
+            // them here.
             exclude: [
                 "chalk",
                 "compression",
