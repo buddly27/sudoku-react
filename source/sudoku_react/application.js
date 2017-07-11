@@ -23,7 +23,7 @@ import createRoutes from "sudoku_react/route";
 import configureStore from "sudoku_react/store";
 import {TRANSLATION_MESSAGES} from "sudoku_react/i18n";
 
-import "./global_styles";
+import "./global_style";
 
 
 /**
