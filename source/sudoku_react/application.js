@@ -12,6 +12,9 @@ import {syncHistoryWithStore} from "react-router-redux";
 import {useScroll} from "react-router-scroll";
 import {install} from "offline-plugin/runtime";
 import "sanitize.css/sanitize.css";
+import "typeface-roboto/index.css";
+
+import {MuiThemeProvider} from "material-ui/styles";
 
 import App from "sudoku_react/container/application";
 import LanguageProvider from "sudoku_react/container/language_provider";
@@ -19,6 +22,8 @@ import {makeSelectLocationState} from "sudoku_react/container/application/select
 import createRoutes from "sudoku_react/route";
 import configureStore from "sudoku_react/store";
 import {TRANSLATION_MESSAGES} from "sudoku_react/i18n";
+
+import "./global_styles";
 
 
 /**
@@ -72,19 +77,21 @@ const ROOT_ROUTE = {
  */
 const render = (messages) => {
     ReactDOM.render(
-        <Provider store={STORE}>
-            <LanguageProvider messages={messages}>
-                <Router
-                    history={HISTORY}
-                    routes={ROOT_ROUTE}
-                    render={
-                        // Scroll to top when going to a new page, imitating
-                        // default browser behaviour
-                        applyRouterMiddleware(useScroll())
-                    }
-                />
-            </LanguageProvider>
-        </Provider>,
+        <MuiThemeProvider>
+            <Provider store={STORE}>
+                <LanguageProvider messages={messages}>
+                    <Router
+                        history={HISTORY}
+                        routes={ROOT_ROUTE}
+                        render={
+                            // Scroll to top when going to a new page, imitating
+                            // default browser behaviour
+                            applyRouterMiddleware(useScroll())
+                        }
+                    />
+                </LanguageProvider>
+            </Provider>
+        </MuiThemeProvider>,
         document.getElementById("app")
     );
 };
@@ -109,21 +116,21 @@ if (!window.Intl) {
             resolve(System.import("intl"));
         }
     ))
-    .then(
-        () => Promise.all(
-            [
-                System.import("intl/locale-data/jsonp/en.js"),
-                System.import("intl/locale-data/jsonp/de.js"),
-                System.import("intl/locale-data/jsonp/fr.js"),
-            ]
+        .then(
+            () => Promise.all(
+                [
+                    System.import("intl/locale-data/jsonp/en.js"),
+                    System.import("intl/locale-data/jsonp/de.js"),
+                    System.import("intl/locale-data/jsonp/fr.js"),
+                ]
+            )
         )
-    )
-    .then(() => render(TRANSLATION_MESSAGES))
-    .catch(
-        (err) => {
-            throw err;
-        }
-    );
+        .then(() => render(TRANSLATION_MESSAGES))
+        .catch(
+            (err) => {
+                throw err;
+            }
+        );
 }
 else {
     render(TRANSLATION_MESSAGES);
