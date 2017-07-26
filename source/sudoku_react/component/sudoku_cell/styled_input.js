@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 /**
- * Render an custom :html-ref:`input` field to represent a cell.
+ * Render a custom :html-ref:`input` field to represent a cell.
  */
 const StyledInput = styled.input`
     color: transparent;
