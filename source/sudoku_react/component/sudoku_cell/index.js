@@ -7,17 +7,10 @@
  * Example::
  *
  *     <SudokuCell
- *         id="c00"
- *         blockId="b00"
- *         value=5
- *         editable
+ *         value="5"
+ *         fixed
  *         onChange={
- *             (value, cellId, blockId) => {
- *                 console.log(
- *                     `A new value ${value} is requested for the cell ` +
- *                     `'${cellId}' belonging to the block '${blockId}'`
- *                 )
- *             }
+ *             (value) => { console.log(`Request new value: ${value}.`); }
  *         }
  *     />
  *
@@ -33,14 +26,8 @@ import StyledInput from "./styled_input";
  *
  * *props* should contain:
  *
- * * id:
- *     Identifier of the cell (e.g. 'c01').
- *
- * * blockId:
- *     Identifier of the block containing this cell (e.g. 'b01').
- *
- * * editable:
- *     Indicate whether the cell is editable.
+ * * fixed:
+ *     Indicate whether the cell cannot be edited (false by default).
  *
  * * value:
  *     Indicate the value of the cell between 0 and 9
@@ -48,37 +35,30 @@ import StyledInput from "./styled_input";
  *
  * * onChange:
  *     Callback function called when the cell is edited. Its arguments
- *     contains the new *value*, the identifier of the cell (e.g. 'c01')
- *     and the identifier of the block (e.g. 'b01').
+ *     contains the new *value*.
  *
  *     Signature::
  *
- *         function(value: number, cellId: string, blockId: string) => void
+ *         function(value: number) => void
  *
  */
 const SudokuCell = (props) => {
-    const {id, blockId, editable, value, onChange} = props;
+    const {fixed, value, onChange} = props;
+    const style = (fixed && value) ? {background: "#6f86ff"} : undefined;
     const number = (!isNaN(value) && value >= 0 && value <= 9) ?
         Number(value) : "";
-    const style = (editable && value) ?
-        {background: "#6f86ff"} : undefined;
 
     return (
         <StyledInput
-            id={`${blockId}.${id}`}
             type="text"
             style={style}
             value={(number !== 0) ? number : ""}
-            disabled={editable}
+            disabled={fixed}
             onChange={
-                (event) => onCellChange(
-                    event.target.value, id, blockId, onChange
-                )
+                (event) => onCellChange(event.target.value, onChange)
             }
             onKeyDown={
-                (event) => onKeyPress(
-                    event, number, id, blockId, onChange
-                )
+                (event) => onKeyPress(event, number, onChange)
             }
         />
     );
@@ -98,10 +78,6 @@ const SudokuCell = (props) => {
  *
  * *number* should be the current value number of the cell (between 0 and 9).
  *
- * *id* should be the identifier of the cell.
- *
- * *blockId* should be the identifier of the block containing this cell.
- *
  * *onChange* should be the callback function called when the new value
  * requested is validated.
  *
@@ -110,11 +86,11 @@ const SudokuCell = (props) => {
  *         function(value: number, cellId: string, blockId: string) => void
  *
  */
-const onKeyPress = (event, number, id, blockId, onChange) => {
+const onKeyPress = (event, number, onChange) => {
     let newNumber = number;
 
     if (!isNaN(event.key)) {
-        onCellChange(event.key, id, blockId, onChange);
+        onCellChange(event.key, onChange);
     }
     else {
         switch (event.key) {
@@ -134,7 +110,7 @@ const onKeyPress = (event, number, id, blockId, onChange) => {
         }
 
         if (newNumber !== null) {
-            onCellChange(newNumber, id, blockId, onChange);
+            onCellChange(newNumber, onChange);
         }
     }
 };
@@ -145,10 +121,6 @@ const onKeyPress = (event, number, id, blockId, onChange) => {
  *
  * *value* should be the new value requested for the cell.
  *
- * *id* should be the identifier of the cell.
- *
- * *blockId* should be the identifier of the block containing this cell.
- *
  * *onChange* should be the callback function called when the new value
  * requested is validated.
  *
@@ -156,14 +128,14 @@ const onKeyPress = (event, number, id, blockId, onChange) => {
  *
  *         function(value: number, cellId: string, blockId: string) => void
  */
-const onCellChange = (value, id, blockId, onChange) => {
+const onCellChange = (value, onChange) => {
     if (isNaN(value)) {
         return;
     }
 
     const number = Number(value);
     if (number >= 0 && number <= 9) {
-        onChange(number, id, blockId);
+        onChange(number);
     }
 };
 
@@ -172,9 +144,7 @@ const onCellChange = (value, id, blockId, onChange) => {
  * Expected types for *props*.
  */
 SudokuCell.propTypes = {
-    id: PropTypes.string.isRequired,
-    blockId: PropTypes.string.isRequired,
-    editable: PropTypes.bool.isRequired,
+    fixed: PropTypes.bool.isRequired,
     value: PropTypes.number,
     onChange: PropTypes.func.isRequired,
 };
@@ -185,6 +155,7 @@ SudokuCell.propTypes = {
  */
 SudokuCell.defaultProps = {
     value: 0,
+    fixed: false,
 };
 
 
