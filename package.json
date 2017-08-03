@@ -209,7 +209,8 @@
             "source/sudoku_react/**/*.{js}",
             "!source/sudoku_react/*/RbGenerated*/*.{js}",
             "!source/sudoku_react/application.js",
-            "!source/sudoku_react/routes.js"
+            "!source/sudoku_react/routes.js",
+            "!source/sudoku_react/global_style.js"
         ],
         "coverageThreshold": {
             "global": {
@@ -304,7 +305,7 @@
         "null-loader": "0.1.1",
         "offline-plugin": "4.8.1",
         "pre-commit": "1.2.2",
-        "react-addons-test-utils": "15.6.0",
+        "react-test-renderer": "15.6.1",
         "rimraf": "2.6.1",
         "shelljs": "0.7.8",
         "sinon": "2.3.6",
