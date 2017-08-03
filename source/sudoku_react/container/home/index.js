@@ -3,12 +3,24 @@
  *
  */
 
+/* eslint-disable react/prefer-stateless-function */
+
 import React from "react";
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {FormattedMessage} from "react-intl";
 
-import messages from "./message";
+import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
+
+import {
+    initiateGrid,
+    onGridChange,
+} from "./action";
+
+import {
+    makeSelectGrid,
+    makeSelectFixedCells,
+} from "./selector";
 
 
 /**
@@ -22,26 +34,51 @@ import messages from "./message";
  *    the linting exception.
  *
  */
-// eslint-disable-next-line react/prefer-stateless-function
-class Home extends React.Component {
+export class Home extends React.Component {
+    /**
+     * Expected types for *props*.
+     */
+    static propTypes = {
+        grid: PropTypes.object.isRequired,
+        fixedCells: PropTypes.array.isRequired,
+        initiateGrid: PropTypes.func.isRequired,
+        onGridChange: PropTypes.func.isRequired,
+    };
+
+    componentWillMount() {
+        this.props.initiateGrid(this.props.grid);
+    }
 
     render() {
+        const {grid, fixedCells} = this.props;
+
         return (
-            <h1>
-                <FormattedMessage {...messages.header} />
-            </h1>
+            <div>
+                <div style={{paddingTop: 50}}>
+                    <SudokuGrid9X9
+                        {...grid}
+                        fixedCells={fixedCells}
+                        onChange={
+                            (newGrid) => this.props.onGridChange(newGrid)
+                        }
+                    />
+                </div>
+            </div>
         );
     }
 }
 
 
 const mapStateToProps = createStructuredSelector({
+    grid: makeSelectGrid(),
+    fixedCells: makeSelectFixedCells(),
 });
 
 
 export function mapDispatchToProps(dispatch) {
     return {
-        dispatch,
+        initiateGrid: (grid) => dispatch(initiateGrid(grid)),
+        onGridChange: (newGrid) => dispatch(onGridChange(newGrid)),
     };
 }
 
