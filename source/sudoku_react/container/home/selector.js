@@ -14,7 +14,7 @@ const selectHome = (state) => state.get("home");
 /**
  * Select the grid state.
  */
-const makeSelectGrid = () => createSelector(
+export const makeSelectGrid = () => createSelector(
     selectHome,
     (state) => state.get("grid").toJS()
 );
@@ -23,13 +23,7 @@ const makeSelectGrid = () => createSelector(
 /**
  * Select the nonEditableCells state.
  */
-const makeSelectFixedCells = () => createSelector(
+export const makeSelectFixedCells = () => createSelector(
     selectHome,
     (state) => state.get("fixedCells").toJS()
 );
-
-
-export {
-    makeSelectGrid,
-    makeSelectFixedCells,
-};

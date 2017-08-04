@@ -209,7 +209,7 @@
             "source/sudoku_react/**/*.{js}",
             "!source/sudoku_react/*/RbGenerated*/*.{js}",
             "!source/sudoku_react/application.js",
-            "!source/sudoku_react/routes.js",
+            "!source/sudoku_react/route.js",
             "!source/sudoku_react/global_style.js"
         ],
         "coverageThreshold": {

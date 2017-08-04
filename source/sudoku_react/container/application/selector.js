@@ -6,7 +6,7 @@
 /**
  * Select the location state.
  */
-const makeSelectLocationState = () => {
+export const makeSelectLocationState = () => {
     let prevRoutingState;
     let prevRoutingStateJS;
 
@@ -20,9 +20,4 @@ const makeSelectLocationState = () => {
 
         return prevRoutingStateJS;
     };
-};
-
-
-export {
-    makeSelectLocationState,
 };
