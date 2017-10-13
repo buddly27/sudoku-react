@@ -5,7 +5,8 @@
 
 import {
     INITIATE_GRID,
-    ON_GRID_CHANGE,
+    REQUEST_GRID_CHANGE,
+    REQUEST_GRID_RESOLVE,
 } from "./constant";
 
 
@@ -17,9 +18,17 @@ export function initiateGrid(grid) {
 }
 
 
-export function onGridChange(newGrid) {
+export function requestGridChange(grid) {
     return {
-        type: ON_GRID_CHANGE,
-        newGrid,
+        type: REQUEST_GRID_CHANGE,
+        grid,
+    };
+}
+
+
+export function requestGridResolve(grid) {
+    return {
+        type: REQUEST_GRID_RESOLVE,
+        grid,
     };
 }

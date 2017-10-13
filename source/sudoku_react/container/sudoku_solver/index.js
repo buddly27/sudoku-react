@@ -15,7 +15,8 @@ import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
 
 import {
     initiateGrid,
-    onGridChange,
+    requestGridChange,
+    requestGridResolve,
 } from "./action";
 
 import {
@@ -37,7 +38,8 @@ export class SudokuSolver extends React.Component {
         fixedCells: PropTypes.array.isRequired,
         errorCells: PropTypes.array.isRequired,
         initiateGrid: PropTypes.func.isRequired,
-        onGridChange: PropTypes.func.isRequired,
+        requestGridChange: PropTypes.func.isRequired,
+        requestGridResolve: PropTypes.func.isRequired,
     };
 
     componentWillMount() {
@@ -66,7 +68,7 @@ export class SudokuSolver extends React.Component {
                         fixedCells={fixedCells}
                         errorCells={errorCells}
                         onChange={
-                            (newGrid) => this.props.onGridChange(newGrid)
+                            (newGrid) => this.props.requestGridChange(newGrid)
                         }
                     />
 
@@ -74,8 +76,11 @@ export class SudokuSolver extends React.Component {
                         <Button
                             color="primary"
                             disabled={errorCells.length}
+                            onClick={
+                                () => this.props.requestGridResolve(grid)
+                            }
                         >
-                            Next Step
+                            Resolve
                         </Button>
                     </div>
                 </div>
@@ -95,7 +100,8 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
     return {
         initiateGrid: (grid) => dispatch(initiateGrid(grid)),
-        onGridChange: (newGrid) => dispatch(onGridChange(newGrid)),
+        requestGridChange: (grid) => dispatch(requestGridChange(grid)),
+        requestGridResolve: (grid) => dispatch(requestGridResolve(grid)),
     };
 }
 
