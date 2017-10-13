@@ -1,14 +1,15 @@
 /**
- * Home Selectors.
+ * SudokuSolver Selectors.
  *
  */
+
 import {createSelector} from "reselect";
 
 
 /**
  * Direct selector to the home state domain.
  */
-const selectHome = (state) => state.get("home");
+const selectHome = (state) => state.get("sudoku_solver");
 
 
 /**

@@ -4,23 +4,23 @@ import React from "react";
 import {mount, shallow} from "enzyme";
 
 import {
-    Home,
+    SudokuSolver,
     mapDispatchToProps,
-} from "sudoku_react/container/home/index";
+} from "sudoku_react/container/sudoku_solver/index";
 
 import {
     initiateGrid,
     onGridChange,
-} from "sudoku_react/container/home/action";
+} from "sudoku_react/container/sudoku_solver/action";
 
 
-describe("<Home />", () => {
+describe("<SudokuSolver />", () => {
     it("should render the home container", () => {
         const initiateGridSpy = jest.fn();
         const onGridChangeSpy = jest.fn();
 
         const renderedComponent = mount(
-            <Home
+            <SudokuSolver
                 grid={{
                     c03: 1, c05: 5,
                     c10: 1, c11: 4, c16: 6, c17: 7,

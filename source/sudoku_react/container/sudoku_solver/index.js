@@ -1,5 +1,5 @@
 /**
- * Home.
+ * SudokuSolver.
  *
  */
 
@@ -24,17 +24,9 @@ import {
 
 
 /**
- * Home Container Component.
- *
- * .. note::
- *
- *    While this component should technically be a stateless functional
- *    component (SFC), hot reloading does not currently support SFCs. If hot
- *    reloading is not a necessity for you then you can refactor it and remove
- *    the linting exception.
- *
+ * SudokuSolver Container Component.
  */
-export class Home extends React.Component {
+export class SudokuSolver extends React.Component {
     /**
      * Expected types for *props*.
      */
@@ -84,6 +76,6 @@ export function mapDispatchToProps(dispatch) {
 
 
 /**
- * Home Container wrapped with the Redux connector.
+ * SudokuSolver Container wrapped with the Redux connector.
  */
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(SudokuSolver);

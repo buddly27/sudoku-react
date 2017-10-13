@@ -5,12 +5,12 @@ import {fromJS} from "immutable";
 import {
     makeSelectGrid,
     makeSelectFixedCells,
-} from "sudoku_react/container/home/selector";
+} from "sudoku_react/container/sudoku_solver/selector";
 
 
 describe("Home selectors", () => {
     const state = fromJS({
-        home: {
+        sudoku_solver: {
             grid: {
                 c03: 1, c05: 5,
                 c10: 1, c11: 4, c16: 6, c17: 7,

@@ -2,12 +2,13 @@
 
 import {fromJS} from "immutable";
 
-import reducer from "sudoku_react/container/home/reducer";
+import reducer from "sudoku_react/container/sudoku_solver/reducer";
 
 import {
     initiateGrid,
     onGridChange,
-} from "sudoku_react/container/home/action";
+} from "sudoku_react/container/sudoku_solver/action";
+
 
 describe("Home reducer", () => {
     let state;

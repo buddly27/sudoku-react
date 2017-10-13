@@ -28,19 +28,19 @@ export default function createRoutes(store) {
 
     return [
         {
-            path: "/",
-            name: "home",
+            path: "/solver",
+            name: "solver",
             getComponent(nextState, cb) {
                 const importModules = Promise.all([
-                    System.import("sudoku_react/container/home/reducer"),
-                    System.import("sudoku_react/container/home/index"),
+                    System.import("sudoku_react/container/sudoku_solver/reducer"),
+                    System.import("sudoku_react/container/sudoku_solver/index"),
                 ]);
 
                 const renderRoute = loadModule(cb);
 
                 importModules.then(
                     ([reducer, component]) => {
-                        injectReducer("home", reducer.default);
+                        injectReducer("sudoku_solver", reducer.default);
                         renderRoute(component);
                     }
                 );

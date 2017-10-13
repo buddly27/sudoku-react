@@ -1,5 +1,5 @@
 /**
- * Home Reducer.
+ * SudokuSolver Reducer.
  *
  */
 

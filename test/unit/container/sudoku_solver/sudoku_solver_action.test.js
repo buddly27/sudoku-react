@@ -3,12 +3,12 @@
 import {
     INITIATE_GRID,
     ON_GRID_CHANGE,
-} from "sudoku_react/container/home/constant";
+} from "sudoku_react/container/sudoku_solver/constant";
 
 import {
     initiateGrid,
     onGridChange,
-} from "sudoku_react/container/home/action";
+} from "sudoku_react/container/sudoku_solver/action";
 
 
 describe("Home actions", () => {
