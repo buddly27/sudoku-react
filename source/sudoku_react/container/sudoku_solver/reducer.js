@@ -6,6 +6,7 @@
 /* eslint-disable object-property-newline */
 
 import {fromJS} from "immutable";
+import {SudokuGrid} from "sudoku-javascript";
 
 import {
     INITIATE_GRID,
@@ -29,6 +30,7 @@ const INITIAL_STATE = fromJS({
         c83: 4, c85: 9,
     },
     fixedCells: [],
+    errorCells: [],
 });
 
 
@@ -39,8 +41,14 @@ export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case INITIATE_GRID:
             return state.set("fixedCells", fromJS(Object.keys(action.grid)));
-        case ON_GRID_CHANGE:
-            return state.set("grid", fromJS({...action.newGrid}));
+        case ON_GRID_CHANGE: {
+            const grid = new SudokuGrid(action.newGrid);
+            const errorMapping = grid.validate();
+
+            return state
+                .set("grid", fromJS({...action.newGrid}))
+                .set("errorCells", fromJS(Object.keys(errorMapping)));
+        }
         default:
             return state;
     }

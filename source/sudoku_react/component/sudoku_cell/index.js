@@ -29,6 +29,9 @@ import StyledInput from "./styled_input";
  * * fixed:
  *     Indicate whether the cell cannot be edited (false by default).
  *
+ * * error:
+ *     Indicate whether the cell has an error (false by default).
+ *
  * * value:
  *     Indicate the value of the cell between 0 and 9
  *     (0 means that the cell is not filled).
@@ -43,10 +46,23 @@ import StyledInput from "./styled_input";
  *
  */
 const SudokuCell = (props) => {
-    const {fixed, value, onChange} = props;
-    const style = (fixed && value) ? {background: "#6f86ff"} : undefined;
+    const {fixed, error, value, onChange} = props;
     const number = (!isNaN(value) && value >= 0 && value <= 9) ?
         Number(value) : "";
+
+    const style = {};
+
+    if (fixed && value) {
+        style.background = "#6f86ff";
+
+        if (error) {
+            style.border = "3px solid #db4646";
+            style.boxSizing = "border-box";
+        }
+    }
+    else if (error) {
+        style.background = "#db4646";
+    }
 
     return (
         <StyledInput
@@ -144,7 +160,8 @@ const onCellChange = (value, onChange) => {
  * Expected types for *props*.
  */
 SudokuCell.propTypes = {
-    fixed: PropTypes.bool.isRequired,
+    fixed: PropTypes.bool,
+    error: PropTypes.bool,
     value: PropTypes.number,
     onChange: PropTypes.func.isRequired,
 };
@@ -156,6 +173,7 @@ SudokuCell.propTypes = {
 SudokuCell.defaultProps = {
     value: 0,
     fixed: false,
+    error: false,
 };
 
 

@@ -70,6 +70,9 @@ import StyledRow from "./styled_row";
  * * fixedCells:
  *     Indicate a list of the cell identifiers which cannot be edited.
  *
+ * * errorCells:
+ *     Indicate a list of the cell identifiers which have an error.
+ *
  * * onChange:
  *     Callback function called when a cell is edited. Its arguments
  *     contains the entire *grid* with the requested update. The grid is an
@@ -94,7 +97,7 @@ const SudokuGrid9X9 = (props) => {
         c80, c81, c82, c83, c84, c85, c86, c87, c88,
     } = props;
 
-    const {fixedCells, onChange} = props;
+    const {fixedCells, errorCells, onChange} = props;
 
     const blocks = mapGridToBlock({
         c00, c01, c02, c03, c04, c05, c06, c07, c08,
@@ -108,7 +111,8 @@ const SudokuGrid9X9 = (props) => {
         c80, c81, c82, c83, c84, c85, c86, c87, c88,
     });
 
-    const fixedBlocks = mapFixedBlock(fixedCells);
+    const fixedBlocks = mapIdentifiersToBlock(fixedCells);
+    const errorBlocks = mapIdentifiersToBlock(errorCells);
 
     return (
         <StyledColumn>
@@ -116,6 +120,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b00}
                     fixedCells={fixedBlocks.b00}
+                    errorCells={errorBlocks.b00}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b00: block});
@@ -126,6 +131,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b01}
                     fixedCells={fixedBlocks.b01}
+                    errorCells={errorBlocks.b01}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b01: block});
@@ -136,6 +142,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b02}
                     fixedCells={fixedBlocks.b02}
+                    errorCells={errorBlocks.b02}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b02: block});
@@ -148,6 +155,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b10}
                     fixedCells={fixedBlocks.b10}
+                    errorCells={errorBlocks.b10}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b10: block});
@@ -158,6 +166,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b11}
                     fixedCells={fixedBlocks.b11}
+                    errorCells={errorBlocks.b11}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b11: block});
@@ -168,6 +177,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b12}
                     fixedCells={fixedBlocks.b12}
+                    errorCells={errorBlocks.b12}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b12: block});
@@ -180,6 +190,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b20}
                     fixedCells={fixedBlocks.b20}
+                    errorCells={errorBlocks.b20}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b20: block});
@@ -190,6 +201,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b21}
                     fixedCells={fixedBlocks.b21}
+                    errorCells={errorBlocks.b21}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b21: block});
@@ -200,6 +212,7 @@ const SudokuGrid9X9 = (props) => {
                 <SudokuGrid3X3
                     {...blocks.b22}
                     fixedCells={fixedBlocks.b22}
+                    errorCells={errorBlocks.b22}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b22: block});
@@ -236,12 +249,12 @@ export const copyBlocks = (blocks, updatedBlocks = {}) => (
 
 
 /**
- * Return a mapping of the *fixedCells* list to pass down the
+ * Return a mapping of the *cellIdentifiers* list to pass down the
  * :mod:`SudokuGrid3x3 <sudoku_react.component.sudoku_grid_3x3>` component.
  *
  * Example::
  *
- *    >>> mapFixedBlock([
+ *    >>> mapIdentifiersToBlock([
  *    ...     "c03", "c05",
  *    ...     "c10", "c11", "c16", "c17",
  *    ...     "c21", "c25", "c26",
@@ -265,11 +278,11 @@ export const copyBlocks = (blocks, updatedBlocks = {}) => (
  *        b22: ["c01", "c11", "c12"],
  *    }
  */
-export const mapFixedBlock = (fixedCells) => {
+export const mapIdentifiersToBlock = (cellIdentifiers) => {
     // Map the list of cell identifiers into an object grouped by block
     // identifiers, which store 9x9 grid objects with the value 'true'
     const blocks = mapGridToBlock(
-        fixedCells.reduce(
+        cellIdentifiers.reduce(
             (result, cellId) => Object.assign({}, result, {[cellId]: true}), {}
         )
     );
@@ -532,6 +545,7 @@ SudokuGrid9X9.propTypes = {
     c87: PropTypes.number,
     c88: PropTypes.number,
     fixedCells: PropTypes.array.isRequired,
+    errorCells: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 

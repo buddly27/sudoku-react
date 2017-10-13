@@ -22,9 +22,18 @@ export const makeSelectGrid = () => createSelector(
 
 
 /**
- * Select the nonEditableCells state.
+ * Select the fixedCells state.
  */
 export const makeSelectFixedCells = () => createSelector(
     selectHome,
     (state) => state.get("fixedCells").toJS()
+);
+
+
+/**
+ * Select the errorCells state.
+ */
+export const makeSelectErrorCells = () => createSelector(
+    selectHome,
+    (state) => state.get("errorCells").toJS()
 );

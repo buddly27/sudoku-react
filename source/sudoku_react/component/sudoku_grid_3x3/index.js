@@ -48,6 +48,9 @@ import StyledRow from "./styled_row";
  * * fixedCells:
  *     Indicate a list of the cell identifiers which cannot be edited.
  *
+ * * errorCells:
+ *     Indicate a list of the cell identifiers which have an error.
+ *
  * * onChange:
  *     Callback function called when a cell is edited. Its arguments
  *     contains the entire *grid* with the requested update. The grid is an
@@ -60,7 +63,7 @@ import StyledRow from "./styled_row";
  *
  */
 const SudokuGrid3X3 = (props) => {
-    const {fixedCells, onChange} = props;
+    const {fixedCells, errorCells, onChange} = props;
     const {c00, c01, c02, c10, c11, c12, c20, c21, c22} = props;
 
     const block = {
@@ -75,6 +78,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c00}
                     fixed={fixedCells.indexOf("c00") !== -1}
+                    error={errorCells.indexOf("c00") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c00: value})
@@ -84,6 +88,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c01}
                     fixed={fixedCells.indexOf("c01") !== -1}
+                    error={errorCells.indexOf("c01") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c01: value})
@@ -93,6 +98,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c02}
                     fixed={fixedCells.indexOf("c02") !== -1}
+                    error={errorCells.indexOf("c02") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c02: value})
@@ -104,6 +110,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c10}
                     fixed={fixedCells.indexOf("c10") !== -1}
+                    error={errorCells.indexOf("c10") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c10: value})
@@ -113,6 +120,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c11}
                     fixed={fixedCells.indexOf("c11") !== -1}
+                    error={errorCells.indexOf("c11") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c11: value})
@@ -122,6 +130,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c12}
                     fixed={fixedCells.indexOf("c12") !== -1}
+                    error={errorCells.indexOf("c12") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c12: value})
@@ -133,6 +142,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c20}
                     fixed={fixedCells.indexOf("c20") !== -1}
+                    error={errorCells.indexOf("c20") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c20: value})
@@ -142,6 +152,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c21}
                     fixed={fixedCells.indexOf("c21") !== -1}
+                    error={errorCells.indexOf("c21") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c21: value})
@@ -151,6 +162,7 @@ const SudokuGrid3X3 = (props) => {
                 <SudokuCell
                     value={c22}
                     fixed={fixedCells.indexOf("c22") !== -1}
+                    error={errorCells.indexOf("c22") !== -1}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c22: value})
@@ -177,6 +189,7 @@ SudokuGrid3X3.propTypes = {
     c21: PropTypes.number,
     c22: PropTypes.number,
     fixedCells: PropTypes.array.isRequired,
+    errorCells: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 
