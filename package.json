@@ -256,7 +256,7 @@
         "redux-immutable": "4.0.0",
         "redux-saga": "0.15.4",
         "reselect": "3.0.1",
-        "sudoku-javascript": "0.1.0",
+        "sudoku-javascript": "0.4.0",
         "styled-components": "1.1.2",
         "sanitize.css": "5.0.0",
         "typeface-roboto": "0.0.31",
