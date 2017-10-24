@@ -18,7 +18,8 @@ import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
 import {
     requestGridInitialisation,
     requestGridChange,
-    requestGridResolve,
+    requestGridResolveAll,
+    requestGridResolveNext,
     requestShowCandidates,
 } from "./action";
 
@@ -48,7 +49,8 @@ export class SudokuSolver extends React.Component {
         gridSolved: PropTypes.bool.isRequired,
         requestGridInitialisation: PropTypes.func.isRequired,
         requestGridChange: PropTypes.func.isRequired,
-        requestGridResolve: PropTypes.func.isRequired,
+        requestGridResolveAll: PropTypes.func.isRequired,
+        requestGridResolveNext: PropTypes.func.isRequired,
         requestShowCandidates: PropTypes.func.isRequired,
     };
 
@@ -125,12 +127,23 @@ export class SudokuSolver extends React.Component {
                     color="primary"
                     disabled={errorCells.length > 0 || gridSolved}
                     onClick={
-                        () => this.props.requestGridResolve(
+                        () => this.props.requestGridResolveNext(
                             gridValues, gridCandidates
                         )
                     }
                 >
-                    Resolve
+                    Resolve Next
+                </Button>
+                <Button
+                    color="primary"
+                    disabled={errorCells.length > 0 || gridSolved}
+                    onClick={
+                        () => this.props.requestGridResolveAll(
+                            gridValues, gridCandidates
+                        )
+                    }
+                >
+                    Resolve All
                 </Button>
             </FormGroup>
         );
@@ -185,8 +198,10 @@ export function mapDispatchToProps(dispatch) {
             dispatch(requestGridInitialisation(gridValues)),
         requestGridChange: (gridValues, gridCandidates) =>
             dispatch(requestGridChange(gridValues, gridCandidates)),
-        requestGridResolve: (gridValues, gridCandidates) =>
-            dispatch(requestGridResolve(gridValues, gridCandidates)),
+        requestGridResolveAll: (gridValues, gridCandidates) =>
+            dispatch(requestGridResolveAll(gridValues, gridCandidates)),
+        requestGridResolveNext: (gridValues, gridCandidates) =>
+            dispatch(requestGridResolveNext(gridValues, gridCandidates)),
         requestShowCandidates: (checked) =>
             dispatch(requestShowCandidates(checked)),
     };

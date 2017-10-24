@@ -11,7 +11,8 @@ import {SudokuGrid, SudokuSolver} from "sudoku-javascript";
 import {
     REQUEST_GRID_INITIALISATION,
     REQUEST_GRID_CHANGE,
-    REQUEST_GRID_RESOLVE,
+    REQUEST_GRID_RESOLVE_ALL,
+    REQUEST_GRID_RESOLVE_NEXT,
     REQUEST_SHOW_CANDIDATES,
 } from "./constant";
 
@@ -64,7 +65,7 @@ export default function reducer(state = INITIAL_STATE, action) {
                 .set("errorCells", fromJS(Object.keys(errorMapping)))
                 .set("gridSolved", grid.isSolved());
         }
-        case REQUEST_GRID_RESOLVE: {
+        case REQUEST_GRID_RESOLVE_ALL: {
             const grid = new SudokuGrid(
                 action.gridValues,
                 action.gridCandidates
@@ -76,6 +77,27 @@ export default function reducer(state = INITIAL_STATE, action) {
                 .set("gridValues", fromJS(grid.toValueMapping()))
                 .set("gridCandidates", fromJS(grid.toCandidateMapping()))
                 .set("gridSolved", result);
+        }
+        case REQUEST_GRID_RESOLVE_NEXT: {
+            const grid = new SudokuGrid(
+                action.gridValues,
+                action.gridCandidates
+            );
+
+            const result = grid.update();
+            if (!result) {
+                const solver = new SudokuSolver();
+                const mapping = solver.applyStrategiesUntilFirstResult(grid);
+                Object.keys(mapping).forEach((identifier) => {
+                    const cell = grid.cellFromId(identifier);
+                    cell.candidates = mapping[identifier].candidates;
+                });
+            }
+
+            return state
+                .set("gridValues", fromJS(grid.toValueMapping()))
+                .set("gridCandidates", fromJS(grid.toCandidateMapping()))
+                .set("gridSolved", grid.isSolved());
         }
         case REQUEST_SHOW_CANDIDATES:
             return state.set("showCandidates", action.checked);
