@@ -10,19 +10,24 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import Button from "material-ui/Button";
+import {FormControlLabel, FormGroup} from "material-ui/Form";
+import Switch from "material-ui/Switch";
 
 import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
 
 import {
-    initiateGrid,
+    requestGridInitialisation,
     requestGridChange,
     requestGridResolve,
+    requestShowCandidates,
 } from "./action";
 
 import {
-    makeSelectGrid,
-    makeSelectFixedCells,
+    makeSelectGridInitialValues,
+    makeSelectGridValues,
+    makeSelectGridCandidates,
     makeSelectErrorCells,
+    makeSelectShowCandidates,
 } from "./selector";
 
 
@@ -34,20 +39,49 @@ export class SudokuSolver extends React.Component {
      * Expected types for *props*.
      */
     static propTypes = {
-        grid: PropTypes.object.isRequired,
-        fixedCells: PropTypes.array.isRequired,
+        gridInitialValues: PropTypes.object.isRequired,
+        gridValues: PropTypes.object.isRequired,
+        gridCandidates: PropTypes.object.isRequired,
         errorCells: PropTypes.array.isRequired,
-        initiateGrid: PropTypes.func.isRequired,
+        showCandidates: PropTypes.bool.isRequired,
+        requestGridInitialisation: PropTypes.func.isRequired,
         requestGridChange: PropTypes.func.isRequired,
         requestGridResolve: PropTypes.func.isRequired,
+        requestShowCandidates: PropTypes.func.isRequired,
     };
 
     componentWillMount() {
-        this.props.initiateGrid(this.props.grid);
+        this.props.requestGridInitialisation(this.props.gridInitialValues);
     }
 
+    onGridChange = (gridData) => {
+        const valueGrid = {};
+        const candidateGrid = {};
+
+        Object.keys(gridData).forEach((cellIdentifier) => {
+            const data = gridData[cellIdentifier];
+
+            if (Array.isArray(data)) {
+                valueGrid[cellIdentifier] = 0;
+                candidateGrid[cellIdentifier] = Array.from(data);
+            }
+            else {
+                valueGrid[cellIdentifier] = data;
+                candidateGrid[cellIdentifier] = [];
+            }
+        });
+
+        this.props.requestGridChange(valueGrid, candidateGrid);
+    };
+
     render() {
-        const {grid, fixedCells, errorCells} = this.props;
+        const {
+            gridInitialValues,
+            gridValues,
+            gridCandidates,
+            errorCells,
+            showCandidates,
+        } = this.props;
 
         const style = {
             container: {
@@ -60,28 +94,70 @@ export class SudokuSolver extends React.Component {
             },
         };
 
+        const formWidget = (
+            <FormGroup>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            onChange={
+                                (event, checked) =>
+                                    this.props.requestShowCandidates(checked)
+                            }
+
+                        />
+                    }
+                    label="Show Candidates"
+                />
+                <Button
+                    color="primary"
+                    onClick={
+                        () => this.props.requestGridInitialisation(
+                            gridInitialValues
+                        )
+                    }
+                >
+                    Reset
+                </Button>
+                <Button
+                    color="primary"
+                    disabled={errorCells.length > 0}
+                    onClick={
+                        () => this.props.requestGridResolve(
+                            gridValues, gridCandidates
+                        )
+                    }
+                >
+                    Resolve
+                </Button>
+            </FormGroup>
+        );
+
+        const _gridCandidates = Object.keys(gridCandidates)
+            .reduce((result, identifier) => {
+                const parent = result;
+                if (gridCandidates[identifier].length > 0) {
+                    parent[identifier] = gridCandidates[identifier];
+                }
+                return parent;
+            }, {});
+
+        const data = Object.assign({}, gridValues, _gridCandidates);
+
         return (
             <div>
                 <div style={style.container}>
                     <SudokuGrid9X9
-                        {...grid}
-                        fixedCells={fixedCells}
+                        {...data}
+                        fixedCells={Object.keys(gridInitialValues)}
                         errorCells={errorCells}
+                        showCandidates={showCandidates}
                         onChange={
-                            (newGrid) => this.props.requestGridChange(newGrid)
+                            (newGrid) => this.onGridChange(newGrid)
                         }
                     />
 
                     <div style={style.controlPanel}>
-                        <Button
-                            color="primary"
-                            disabled={errorCells.length}
-                            onClick={
-                                () => this.props.requestGridResolve(grid)
-                            }
-                        >
-                            Resolve
-                        </Button>
+                        {formWidget}
                     </div>
                 </div>
             </div>
@@ -91,17 +167,24 @@ export class SudokuSolver extends React.Component {
 
 
 const mapStateToProps = createStructuredSelector({
-    grid: makeSelectGrid(),
-    fixedCells: makeSelectFixedCells(),
+    gridInitialValues: makeSelectGridInitialValues(),
+    gridValues: makeSelectGridValues(),
+    gridCandidates: makeSelectGridCandidates(),
     errorCells: makeSelectErrorCells(),
+    showCandidates: makeSelectShowCandidates(),
 });
 
 
 export function mapDispatchToProps(dispatch) {
     return {
-        initiateGrid: (grid) => dispatch(initiateGrid(grid)),
-        requestGridChange: (grid) => dispatch(requestGridChange(grid)),
-        requestGridResolve: (grid) => dispatch(requestGridResolve(grid)),
+        requestGridInitialisation: (gridValues) =>
+            dispatch(requestGridInitialisation(gridValues)),
+        requestGridChange: (gridValues, gridCandidates) =>
+            dispatch(requestGridChange(gridValues, gridCandidates)),
+        requestGridResolve: (gridValues, gridCandidates) =>
+            dispatch(requestGridResolve(gridValues, gridCandidates)),
+        requestShowCandidates: (checked) =>
+            dispatch(requestShowCandidates(checked)),
     };
 }
 

@@ -9,24 +9,32 @@ import {createSelector} from "reselect";
 /**
  * Direct selector to the home state domain.
  */
-const selectHome = (state) => state.get("sudoku_solver");
+const selectSudokuSolver = (state) => state.get("sudoku_solver");
 
 
 /**
- * Select the grid state.
+ * Select the gridInitialValues state.
  */
-export const makeSelectGrid = () => createSelector(
-    selectHome,
-    (state) => state.get("grid").toJS()
+export const makeSelectGridInitialValues = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("gridInitialValues").toJS()
 );
 
 
 /**
- * Select the fixedCells state.
+ * Select the gridValues state.
  */
-export const makeSelectFixedCells = () => createSelector(
-    selectHome,
-    (state) => state.get("fixedCells").toJS()
+export const makeSelectGridValues = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("gridValues").toJS()
+);
+
+/**
+ * Select the gridCandidates state.
+ */
+export const makeSelectGridCandidates = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("gridCandidates").toJS()
 );
 
 
@@ -34,6 +42,15 @@ export const makeSelectFixedCells = () => createSelector(
  * Select the errorCells state.
  */
 export const makeSelectErrorCells = () => createSelector(
-    selectHome,
+    selectSudokuSolver,
     (state) => state.get("errorCells").toJS()
+);
+
+
+/**
+ * Select the showCandidates state.
+ */
+export const makeSelectShowCandidates = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("showCandidates")
 );
