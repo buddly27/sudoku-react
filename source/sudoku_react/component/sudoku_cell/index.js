@@ -286,6 +286,7 @@ export default class SudokuCell extends React.PureComponent {
                                 onBlur={
                                     () => this.setState({editionMode: false})
                                 }
+                                readOnly
                             />
                         ))
                     }
