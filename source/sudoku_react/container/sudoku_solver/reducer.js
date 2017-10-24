@@ -72,7 +72,6 @@ export default function reducer(state = INITIAL_STATE, action) {
             const solver = new SudokuSolver();
             const result = solver.resolve(grid);
 
-            console.log(result);
             return state
                 .set("gridValues", fromJS(grid.toValueMapping()))
                 .set("gridCandidates", fromJS(grid.toCandidateMapping()))
