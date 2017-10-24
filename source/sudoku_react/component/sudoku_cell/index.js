@@ -148,7 +148,10 @@ export default class SudokuCell extends React.PureComponent {
         }
 
         const number = Number(value);
-        if (number >= 0 && number <= 9) {
+        if (number === 0) {
+            onChange([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        }
+        else if (number > 0 && number <= 9) {
             onChange(number);
         }
     };
