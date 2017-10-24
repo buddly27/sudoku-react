@@ -28,6 +28,7 @@ import {
     makeSelectGridCandidates,
     makeSelectErrorCells,
     makeSelectShowCandidates,
+    makeSelectGridSolved,
 } from "./selector";
 
 
@@ -44,6 +45,7 @@ export class SudokuSolver extends React.Component {
         gridCandidates: PropTypes.object.isRequired,
         errorCells: PropTypes.array.isRequired,
         showCandidates: PropTypes.bool.isRequired,
+        gridSolved: PropTypes.bool.isRequired,
         requestGridInitialisation: PropTypes.func.isRequired,
         requestGridChange: PropTypes.func.isRequired,
         requestGridResolve: PropTypes.func.isRequired,
@@ -81,6 +83,7 @@ export class SudokuSolver extends React.Component {
             gridCandidates,
             errorCells,
             showCandidates,
+            gridSolved,
         } = this.props;
 
         const style = {
@@ -120,7 +123,7 @@ export class SudokuSolver extends React.Component {
                 </Button>
                 <Button
                     color="primary"
-                    disabled={errorCells.length > 0}
+                    disabled={errorCells.length > 0 || gridSolved}
                     onClick={
                         () => this.props.requestGridResolve(
                             gridValues, gridCandidates
@@ -172,6 +175,7 @@ const mapStateToProps = createStructuredSelector({
     gridCandidates: makeSelectGridCandidates(),
     errorCells: makeSelectErrorCells(),
     showCandidates: makeSelectShowCandidates(),
+    gridSolved: makeSelectGridSolved(),
 });
 
 

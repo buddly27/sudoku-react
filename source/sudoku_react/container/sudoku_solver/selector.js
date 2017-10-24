@@ -54,3 +54,12 @@ export const makeSelectShowCandidates = () => createSelector(
     selectSudokuSolver,
     (state) => state.get("showCandidates")
 );
+
+
+/**
+ * Select the gridSolved state.
+ */
+export const makeSelectGridSolved = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("gridSolved")
+);

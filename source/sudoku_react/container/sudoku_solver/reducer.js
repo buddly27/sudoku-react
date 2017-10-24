@@ -35,6 +35,7 @@ const INITIAL_STATE = fromJS({
     gridCandidates: {},
     errorCells: [],
     showCandidates: false,
+    gridSolved: false,
 });
 
 
@@ -47,7 +48,8 @@ export default function reducer(state = INITIAL_STATE, action) {
             return state
                 .set("gridValues", fromJS(action.gridValues))
                 .set("gridCandidates", fromJS({}))
-                .set("errorCells", fromJS([]));
+                .set("errorCells", fromJS([]))
+                .set("gridSolved", false);
         case REQUEST_GRID_CHANGE: {
             const grid = new SudokuGrid(
                 action.gridValues,
@@ -59,7 +61,8 @@ export default function reducer(state = INITIAL_STATE, action) {
             return state
                 .set("gridCandidates", fromJS(grid.toCandidateMapping()))
                 .set("gridValues", fromJS(grid.toValueMapping()))
-                .set("errorCells", fromJS(Object.keys(errorMapping)));
+                .set("errorCells", fromJS(Object.keys(errorMapping)))
+                .set("gridSolved", grid.isSolved());
         }
         case REQUEST_GRID_RESOLVE: {
             const grid = new SudokuGrid(
@@ -67,11 +70,13 @@ export default function reducer(state = INITIAL_STATE, action) {
                 action.gridCandidates
             );
             const solver = new SudokuSolver();
-            solver.resolve(grid);
+            const result = solver.resolve(grid);
 
+            console.log(result);
             return state
                 .set("gridValues", fromJS(grid.toValueMapping()))
-                .set("gridCandidates", fromJS(grid.toCandidateMapping()));
+                .set("gridCandidates", fromJS(grid.toCandidateMapping()))
+                .set("gridSolved", result);
         }
         case REQUEST_SHOW_CANDIDATES:
             return state.set("showCandidates", action.checked);
