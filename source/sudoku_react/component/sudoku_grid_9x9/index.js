@@ -59,19 +59,23 @@ import StyledRow from "./styled_row";
  * *props* should contain:
  *
  * * cXX:
- *     Indicate the value contained in the corresponding cell between 0 and 9
- *     (0 means that the cell is not filled). The grid contains 81 cells with
+ *     Indicate the value of the cell which must be a number between 1 and 9, or
+ *     the list of candidates numbers. The grid contains 81 cells with
  *     81 corresponding cell identifier properties that specify the position of
  *     the cell in the grid. The first number and the second number of the
  *     property name indicate respectfully the row index and the column index.
  *     'c00' indicates the cell in the top left corner and 'c88' the cell in the
- *     bottom right corner. By default, each cell is initiated to 0.
+ *     bottom right corner. By default, each cell is initiated to a candidates
+ *     list containing all possible values.
  *
  * * fixedCells:
  *     Indicate a list of the cell identifiers which cannot be edited.
  *
  * * errorCells:
  *     Indicate a list of the cell identifiers which have an error.
+ *
+ * * showCandidates:
+ *     Indicate whether the candidates should be shown (false by default).
  *
  * * onChange:
  *     Callback function called when a cell is edited. Its arguments
@@ -81,8 +85,7 @@ import StyledRow from "./styled_row";
  *
  *     Signature::
  *
- *         function(grid: object) => void
- *
+ *         function(grid) => void
  */
 const SudokuGrid9X9 = (props) => {
     const {
@@ -97,7 +100,7 @@ const SudokuGrid9X9 = (props) => {
         c80, c81, c82, c83, c84, c85, c86, c87, c88,
     } = props;
 
-    const {fixedCells, errorCells, onChange} = props;
+    const {fixedCells, errorCells, showCandidates, onChange} = props;
 
     const blocks = mapGridToBlock({
         c00, c01, c02, c03, c04, c05, c06, c07, c08,
@@ -121,6 +124,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b00}
                     fixedCells={fixedBlocks.b00}
                     errorCells={errorBlocks.b00}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b00: block});
@@ -132,6 +136,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b01}
                     fixedCells={fixedBlocks.b01}
                     errorCells={errorBlocks.b01}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b01: block});
@@ -143,6 +148,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b02}
                     fixedCells={fixedBlocks.b02}
                     errorCells={errorBlocks.b02}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b02: block});
@@ -156,6 +162,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b10}
                     fixedCells={fixedBlocks.b10}
                     errorCells={errorBlocks.b10}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b10: block});
@@ -167,6 +174,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b11}
                     fixedCells={fixedBlocks.b11}
                     errorCells={errorBlocks.b11}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b11: block});
@@ -178,6 +186,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b12}
                     fixedCells={fixedBlocks.b12}
                     errorCells={errorBlocks.b12}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b12: block});
@@ -191,6 +200,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b20}
                     fixedCells={fixedBlocks.b20}
                     errorCells={errorBlocks.b20}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b20: block});
@@ -202,6 +212,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b21}
                     fixedCells={fixedBlocks.b21}
                     errorCells={errorBlocks.b21}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b21: block});
@@ -213,6 +224,7 @@ const SudokuGrid9X9 = (props) => {
                     {...blocks.b22}
                     fixedCells={fixedBlocks.b22}
                     errorCells={errorBlocks.b22}
+                    showCandidates={showCandidates}
                     onChange={
                         (block) => {
                             const newBlocks = copyBlocks(blocks, {b22: block});
@@ -463,89 +475,90 @@ export const mapBlockToGrid = ({
  * Expected types for *props*.
  */
 SudokuGrid9X9.propTypes = {
-    c00: PropTypes.number,
-    c01: PropTypes.number,
-    c02: PropTypes.number,
-    c03: PropTypes.number,
-    c04: PropTypes.number,
-    c05: PropTypes.number,
-    c06: PropTypes.number,
-    c07: PropTypes.number,
-    c08: PropTypes.number,
-    c10: PropTypes.number,
-    c11: PropTypes.number,
-    c12: PropTypes.number,
-    c13: PropTypes.number,
-    c14: PropTypes.number,
-    c15: PropTypes.number,
-    c16: PropTypes.number,
-    c17: PropTypes.number,
-    c18: PropTypes.number,
-    c20: PropTypes.number,
-    c21: PropTypes.number,
-    c22: PropTypes.number,
-    c23: PropTypes.number,
-    c24: PropTypes.number,
-    c25: PropTypes.number,
-    c26: PropTypes.number,
-    c27: PropTypes.number,
-    c28: PropTypes.number,
-    c30: PropTypes.number,
-    c31: PropTypes.number,
-    c32: PropTypes.number,
-    c33: PropTypes.number,
-    c34: PropTypes.number,
-    c35: PropTypes.number,
-    c36: PropTypes.number,
-    c37: PropTypes.number,
-    c38: PropTypes.number,
-    c40: PropTypes.number,
-    c41: PropTypes.number,
-    c42: PropTypes.number,
-    c43: PropTypes.number,
-    c44: PropTypes.number,
-    c45: PropTypes.number,
-    c46: PropTypes.number,
-    c47: PropTypes.number,
-    c48: PropTypes.number,
-    c50: PropTypes.number,
-    c51: PropTypes.number,
-    c52: PropTypes.number,
-    c53: PropTypes.number,
-    c54: PropTypes.number,
-    c55: PropTypes.number,
-    c56: PropTypes.number,
-    c57: PropTypes.number,
-    c58: PropTypes.number,
-    c60: PropTypes.number,
-    c61: PropTypes.number,
-    c62: PropTypes.number,
-    c63: PropTypes.number,
-    c64: PropTypes.number,
-    c65: PropTypes.number,
-    c66: PropTypes.number,
-    c67: PropTypes.number,
-    c68: PropTypes.number,
-    c70: PropTypes.number,
-    c71: PropTypes.number,
-    c72: PropTypes.number,
-    c73: PropTypes.number,
-    c74: PropTypes.number,
-    c75: PropTypes.number,
-    c76: PropTypes.number,
-    c77: PropTypes.number,
-    c78: PropTypes.number,
-    c80: PropTypes.number,
-    c81: PropTypes.number,
-    c82: PropTypes.number,
-    c83: PropTypes.number,
-    c84: PropTypes.number,
-    c85: PropTypes.number,
-    c86: PropTypes.number,
-    c87: PropTypes.number,
-    c88: PropTypes.number,
+    c00: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c01: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c02: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c03: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c04: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c05: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c06: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c07: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c08: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c10: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c11: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c12: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c13: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c14: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c15: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c16: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c17: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c18: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c20: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c21: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c22: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c23: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c24: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c25: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c26: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c27: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c28: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c30: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c31: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c32: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c33: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c34: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c35: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c36: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c37: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c38: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c40: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c41: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c42: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c43: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c44: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c45: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c46: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c47: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c48: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c50: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c51: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c52: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c53: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c54: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c55: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c56: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c57: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c58: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c60: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c61: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c62: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c63: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c64: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c65: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c66: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c67: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c68: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c70: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c71: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c72: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c73: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c74: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c75: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c76: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c77: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c78: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c80: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c81: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c82: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c83: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c84: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c85: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c86: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c87: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c88: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
     fixedCells: PropTypes.array.isRequired,
     errorCells: PropTypes.array.isRequired,
+    showCandidates: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 
@@ -554,15 +567,87 @@ SudokuGrid9X9.propTypes = {
  * Default values for *props*.
  */
 SudokuGrid9X9.defaultProps = {
-    c00: 0, c01: 0, c02: 0, c03: 0, c04: 0, c05: 0, c06: 0, c07: 0, c08: 0,
-    c10: 0, c11: 0, c12: 0, c13: 0, c14: 0, c15: 0, c16: 0, c17: 0, c18: 0,
-    c20: 0, c21: 0, c22: 0, c23: 0, c24: 0, c25: 0, c26: 0, c27: 0, c28: 0,
-    c30: 0, c31: 0, c32: 0, c33: 0, c34: 0, c35: 0, c36: 0, c37: 0, c38: 0,
-    c40: 0, c41: 0, c42: 0, c43: 0, c44: 0, c45: 0, c46: 0, c47: 0, c48: 0,
-    c50: 0, c51: 0, c52: 0, c53: 0, c54: 0, c55: 0, c56: 0, c57: 0, c58: 0,
-    c60: 0, c61: 0, c62: 0, c63: 0, c64: 0, c65: 0, c66: 0, c67: 0, c68: 0,
-    c70: 0, c71: 0, c72: 0, c73: 0, c74: 0, c75: 0, c76: 0, c77: 0, c78: 0,
-    c80: 0, c81: 0, c82: 0, c83: 0, c84: 0, c85: 0, c86: 0, c87: 0, c88: 0,
+    c00: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c01: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c02: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c03: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c04: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c05: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c06: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c07: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c08: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c10: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c11: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c12: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c13: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c14: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c15: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c16: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c17: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c18: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c20: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c21: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c22: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c23: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c24: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c25: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c26: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c27: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c28: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c30: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c31: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c32: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c33: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c34: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c35: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c36: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c37: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c38: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c40: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c41: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c42: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c43: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c44: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c45: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c46: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c47: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c48: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c50: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c51: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c52: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c53: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c54: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c55: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c56: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c57: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c58: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c60: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c61: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c62: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c63: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c64: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c65: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c66: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c67: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c68: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c70: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c71: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c72: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c73: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c74: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c75: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c76: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c77: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c78: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c80: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c81: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c82: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c83: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c84: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c85: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c86: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c87: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    c88: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 };
 
 

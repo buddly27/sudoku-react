@@ -37,19 +37,23 @@ import StyledRow from "./styled_row";
  * *props* should contain:
  *
  * * cXX:
- *     Indicate the value contained in the corresponding cell between 0 and 9
- *     (0 means that the cell is not filled). The grid contains 9 cells with
+ *     Indicate the value of the cell which must be a number between 1 and 9, or
+ *     the list of candidates numbers. The grid contains 9 cells with
  *     9 corresponding cell identifier properties that specify the position of
  *     the cell in the grid. The first number and the second number of the
  *     property name indicate respectfully the row index and the column index.
  *     'c00' indicates the cell in the top left corner and 'c22' the cell in the
- *     bottom right corner. By default, each cell is initiated to 0.
+ *     bottom right corner. By default, each cell is initiated to a candidates
+ *     list containing all possible values.
  *
  * * fixedCells:
  *     Indicate a list of the cell identifiers which cannot be edited.
  *
  * * errorCells:
  *     Indicate a list of the cell identifiers which have an error.
+ *
+ * * showCandidates:
+ *     Indicate whether the candidates should be shown (false by default).
  *
  * * onChange:
  *     Callback function called when a cell is edited. Its arguments
@@ -59,26 +63,22 @@ import StyledRow from "./styled_row";
  *
  *     Signature::
  *
- *         function(grid: object) => void
- *
+ *         function(grid) => void
  */
 const SudokuGrid3X3 = (props) => {
-    const {fixedCells, errorCells, onChange} = props;
+    const {fixedCells, errorCells, showCandidates, onChange} = props;
     const {c00, c01, c02, c10, c11, c12, c20, c21, c22} = props;
 
-    const block = {
-        c00, c01, c02,
-        c10, c11, c12,
-        c20, c21, c22,
-    };
+    const block = {c00, c01, c02, c10, c11, c12, c20, c21, c22};
 
     return (
         <StyledColumn>
             <StyledRow>
                 <SudokuCell
-                    value={c00}
+                    data={c00}
                     fixed={fixedCells.indexOf("c00") !== -1}
                     error={errorCells.indexOf("c00") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c00: value})
@@ -86,9 +86,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c01}
+                    data={c01}
                     fixed={fixedCells.indexOf("c01") !== -1}
                     error={errorCells.indexOf("c01") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c01: value})
@@ -96,9 +97,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c02}
+                    data={c02}
                     fixed={fixedCells.indexOf("c02") !== -1}
                     error={errorCells.indexOf("c02") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c02: value})
@@ -108,9 +110,10 @@ const SudokuGrid3X3 = (props) => {
             </StyledRow>
             <StyledRow>
                 <SudokuCell
-                    value={c10}
+                    data={c10}
                     fixed={fixedCells.indexOf("c10") !== -1}
                     error={errorCells.indexOf("c10") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c10: value})
@@ -118,9 +121,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c11}
+                    data={c11}
                     fixed={fixedCells.indexOf("c11") !== -1}
                     error={errorCells.indexOf("c11") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c11: value})
@@ -128,9 +132,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c12}
+                    data={c12}
                     fixed={fixedCells.indexOf("c12") !== -1}
                     error={errorCells.indexOf("c12") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c12: value})
@@ -140,9 +145,10 @@ const SudokuGrid3X3 = (props) => {
             </StyledRow>
             <StyledRow>
                 <SudokuCell
-                    value={c20}
+                    data={c20}
                     fixed={fixedCells.indexOf("c20") !== -1}
                     error={errorCells.indexOf("c20") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c20: value})
@@ -150,9 +156,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c21}
+                    data={c21}
                     fixed={fixedCells.indexOf("c21") !== -1}
                     error={errorCells.indexOf("c21") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c21: value})
@@ -160,9 +167,10 @@ const SudokuGrid3X3 = (props) => {
                     }
                 />
                 <SudokuCell
-                    value={c22}
+                    data={c22}
                     fixed={fixedCells.indexOf("c22") !== -1}
                     error={errorCells.indexOf("c22") !== -1}
+                    showCandidates={showCandidates}
                     onChange={
                         (value) => onChange(
                             Object.assign({}, block, {c22: value})
@@ -179,17 +187,18 @@ const SudokuGrid3X3 = (props) => {
  * Expected types for *props*.
  */
 SudokuGrid3X3.propTypes = {
-    c00: PropTypes.number,
-    c01: PropTypes.number,
-    c02: PropTypes.number,
-    c10: PropTypes.number,
-    c11: PropTypes.number,
-    c12: PropTypes.number,
-    c20: PropTypes.number,
-    c21: PropTypes.number,
-    c22: PropTypes.number,
+    c00: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c01: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c02: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c10: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c11: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c12: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c20: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c21: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+    c22: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
     fixedCells: PropTypes.array.isRequired,
     errorCells: PropTypes.array.isRequired,
+    showCandidates: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 
@@ -198,9 +207,15 @@ SudokuGrid3X3.propTypes = {
  * Default values for *props*.
  */
 SudokuGrid3X3.defaultProps = {
-    c00: 0, c01: 0, c02: 0,
-    c10: 0, c11: 0, c12: 0,
-    c20: 0, c21: 0, c22: 0,
+    c00: [1, 2, 3, 4, 5, 6, 7, 8],
+    c01: [1, 2, 3, 4, 5, 6, 7, 8],
+    c02: [1, 2, 3, 4, 5, 6, 7, 8],
+    c10: [1, 2, 3, 4, 5, 6, 7, 8],
+    c11: [1, 2, 3, 4, 5, 6, 7, 8],
+    c12: [1, 2, 3, 4, 5, 6, 7, 8],
+    c20: [1, 2, 3, 4, 5, 6, 7, 8],
+    c21: [1, 2, 3, 4, 5, 6, 7, 8],
+    c22: [1, 2, 3, 4, 5, 6, 7, 8],
 };
 
 
