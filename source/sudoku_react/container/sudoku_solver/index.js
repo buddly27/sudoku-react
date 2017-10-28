@@ -9,11 +9,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import Button from "material-ui/Button";
-import {FormControlLabel, FormGroup} from "material-ui/Form";
-import Switch from "material-ui/Switch";
 
 import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
+import SolverControlForm from "sudoku_react/component/solver_control_form";
 
 import {
     requestGridInitialisation,
@@ -54,29 +52,10 @@ export class SudokuSolver extends React.Component {
         requestShowCandidates: PropTypes.func.isRequired,
     };
 
+    /** Initiate the grid before mounting the component. */
     componentWillMount() {
         this.props.requestGridInitialisation(this.props.gridInitialValues);
     }
-
-    onGridChange = (gridData) => {
-        const valueGrid = {};
-        const candidateGrid = {};
-
-        Object.keys(gridData).forEach((cellIdentifier) => {
-            const data = gridData[cellIdentifier];
-
-            if (Array.isArray(data)) {
-                valueGrid[cellIdentifier] = 0;
-                candidateGrid[cellIdentifier] = Array.from(data);
-            }
-            else {
-                valueGrid[cellIdentifier] = data;
-                candidateGrid[cellIdentifier] = [];
-            }
-        });
-
-        this.props.requestGridChange(valueGrid, candidateGrid);
-    };
 
     render() {
         const {
@@ -94,91 +73,141 @@ export class SudokuSolver extends React.Component {
                 display: "flex",
                 flexWrap: "wrap",
             },
-            controlPanel: {
-                padding: 10,
-            },
         };
-
-        const formWidget = (
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            onChange={
-                                (event, checked) =>
-                                    this.props.requestShowCandidates(checked)
-                            }
-
-                        />
-                    }
-                    label="Show Candidates"
-                />
-                <Button
-                    color="primary"
-                    onClick={
-                        () => this.props.requestGridInitialisation(
-                            gridInitialValues
-                        )
-                    }
-                >
-                    Reset
-                </Button>
-                <Button
-                    color="primary"
-                    disabled={errorCells.length > 0 || gridSolved}
-                    onClick={
-                        () => this.props.requestGridResolveNext(
-                            gridValues, gridCandidates
-                        )
-                    }
-                >
-                    Resolve Next
-                </Button>
-                <Button
-                    color="primary"
-                    disabled={errorCells.length > 0 || gridSolved}
-                    onClick={
-                        () => this.props.requestGridResolveAll(
-                            gridValues, gridCandidates
-                        )
-                    }
-                >
-                    Resolve All
-                </Button>
-            </FormGroup>
-        );
-
-        const _gridCandidates = Object.keys(gridCandidates)
-            .reduce((result, identifier) => {
-                const parent = result;
-                if (gridCandidates[identifier].length > 0) {
-                    parent[identifier] = gridCandidates[identifier];
-                }
-                return parent;
-            }, {});
-
-        const data = Object.assign({}, gridValues, _gridCandidates);
 
         return (
             <div>
                 <div style={style.container}>
                     <SudokuGrid9X9
-                        {...data}
+                        {...combineGridMapping(gridValues, gridCandidates)}
                         fixedCells={Object.keys(gridInitialValues)}
                         errorCells={errorCells}
                         showCandidates={showCandidates}
                         onChange={
-                            (newGrid) => this.onGridChange(newGrid)
+                            (newGrid) => {
+                                const mapping = decanteGridMapping(newGrid);
+                                this.props.requestGridChange(
+                                    mapping.value, mapping.candidate,
+                                );
+                            }
                         }
                     />
 
-                    <div style={style.controlPanel}>
-                        {formWidget}
-                    </div>
+                    <SolverControlForm
+                        onShowCandidateToggle={this.props.requestShowCandidates}
+                        onGridReset={
+                            () => this.props.requestGridInitialisation(
+                                gridInitialValues
+                            )
+                        }
+                        onResolveNext={
+                            () => this.props.requestGridResolveNext(
+                                gridValues, gridCandidates
+                            )
+                        }
+                        onResolveAll={
+                            () => this.props.requestGridResolveAll(
+                                gridValues, gridCandidates
+                            )
+                        }
+                        resolveDisabled={errorCells.length > 0 || gridSolved}
+                    />
                 </div>
             </div>
         );
     }
+}
+
+
+/**
+ * Return combination of *valueMapping* and *candidateMapping* into one mapping.
+ *
+ * For each property with an empty array, the value from the corresponding
+ * *valueMapping* is kept in the data mapping. Otherwise, the value from the
+ * corresponding *candidateMapping* is kept.
+ *
+ * Example::
+ *
+ *     >>> const valueMapping = {
+ *     ...     c00: 5, c01: 0, c02: 0, c03: 2,
+ *     ... }
+ *     >>> const candidateMapping = {
+ *     ...     c00: [],
+ *     ...     c01: [1, 2, 3, 4],
+ *     ...     c02: [1, 2, 3],
+ *     ...     c03: [],
+ *     ... }
+ *     >>> combineGridMapping()
+ *     {
+ *         c00: 5,
+ *         c01: [1, 2, 3, 4],
+ *         c02: [1, 2, 3],
+ *         c03: 2,
+ *     }
+ */
+export function combineGridMapping(valueMapping, candidateMapping) {
+    const _candidateMapping = Object.keys(candidateMapping)
+        .reduce((result, identifier) => {
+            const parent = result;
+            if (candidateMapping[identifier].length > 0) {
+                parent[identifier] = candidateMapping[identifier];
+            }
+            return parent;
+        }, {});
+
+    return Object.assign({}, valueMapping, _candidateMapping);
+}
+
+
+/**
+ * Return separated value and candidate mappings from the *dataMapping*.
+ *
+ * For each *dataMapping* property with an array, the value mapping will have a
+ * zero value and the candidate mapping will keep the data value for the same
+ * identifier. Otherwise, the value mapping will have the data value and the
+ * candidate mapping will have an empty array.
+ *
+ * Example::
+ *
+ *     >>> const dataMapping = {
+ *     ...     c00: 5,
+ *     ...     c01: [1, 2, 3, 4],
+ *     ...     c02: [1, 2, 3],
+ *     ...     c03: 2,
+ *     ... }
+ *     >>> decanteGridMapping(dataMapping)
+ *     {
+ *         value: {
+ *             c00: 5, c01: 0, c02: 0, c03: 2,
+ *         },
+ *         candidate: {
+ *             c00: [],
+ *             c01: [1, 2, 3, 4],
+ *             c02: [1, 2, 3],
+ *             c03: [],
+ *         },
+ *     }
+ */
+export function decanteGridMapping(dataMapping) {
+    const mapping = {
+        value: {},
+        candidate: {},
+    };
+
+    Object.keys(dataMapping).forEach((cellIdentifier) => {
+        const data = dataMapping[cellIdentifier];
+
+        if (Array.isArray(data)) {
+            mapping.value[cellIdentifier] = 0;
+            mapping.candidate[cellIdentifier] = Array.from(data);
+        }
+        else {
+            mapping.value[cellIdentifier] = data;
+            mapping.candidate[cellIdentifier] = [];
+        }
+    });
+
+    return mapping;
 }
 
 
