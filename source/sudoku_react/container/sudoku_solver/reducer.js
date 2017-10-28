@@ -71,12 +71,26 @@ export default function reducer(state = INITIAL_STATE, action) {
                 action.gridCandidates
             );
             const solver = new SudokuSolver();
-            const result = solver.resolve(grid);
+
+            let errorCells = [];
+            let gridSolved = false;
+
+            try {
+                gridSolved = solver.resolve(grid);
+            }
+            catch (error) {
+                if (error.name === "SudokuCellError") {
+                    const errorMapping = grid.validate();
+                    errorCells = Object.keys(errorMapping);
+                    errorCells.push(error.identifier);
+                }
+            }
 
             return state
+                .set("errorCells", fromJS(errorCells))
                 .set("gridValues", fromJS(grid.toValueMapping()))
                 .set("gridCandidates", fromJS(grid.toCandidateMapping()))
-                .set("gridSolved", result);
+                .set("gridSolved", gridSolved);
         }
         case REQUEST_GRID_RESOLVE_NEXT: {
             const grid = new SudokuGrid(
@@ -84,17 +98,33 @@ export default function reducer(state = INITIAL_STATE, action) {
                 action.gridCandidates
             );
 
-            const result = grid.update();
-            if (!result) {
-                const solver = new SudokuSolver();
-                const mapping = solver.applyStrategiesUntilFirstResult(grid);
-                Object.keys(mapping).forEach((identifier) => {
-                    const cell = grid.cellFromId(identifier);
-                    cell.candidates = mapping[identifier].candidates;
-                });
+            let errorCells = [];
+
+            try {
+                // Apply strategies if the grid could not be updated
+                if (!updateGrid(grid)) {
+                    const solver = new SudokuSolver();
+                    const mapping = solver.applyStrategiesUntilFirstResult(grid);
+                    Object.keys(mapping).forEach((identifier) => {
+                        const cell = grid.cellFromId(identifier);
+                        cell.candidates = mapping[identifier].candidates;
+                    });
+
+                    // Update solved cells after applying the strategies
+                    grid.updateSolvedCells();
+                }
+            }
+            catch (error) {
+                if (error.name === "SudokuCellError") {
+                    errorCells.push(error.identifier);
+                }
             }
 
+            const errorMapping = grid.validate();
+            errorCells = errorCells.concat(Object.keys(errorMapping));
+
             return state
+                .set("errorCells", fromJS(errorCells))
                 .set("gridValues", fromJS(grid.toValueMapping()))
                 .set("gridCandidates", fromJS(grid.toCandidateMapping()))
                 .set("gridSolved", grid.isSolved());
@@ -104,4 +134,29 @@ export default function reducer(state = INITIAL_STATE, action) {
         default:
             return state;
     }
+}
+
+
+/**
+ * Update the cells value and candidates of the *grid*.
+ *
+ * Return true as soon as a new value is found or as soon as new candidates are
+ * set if *showCandidates* is positive. Otherwise return false.
+ */
+export function updateGrid(grid, showCandidates) {
+    let candidatesUpdated = false;
+
+    do {
+        const solved = grid.updateSolvedCells();
+        if (solved) {
+            return true;
+        }
+
+        candidatesUpdated = grid.updateCandidates();
+        if (candidatesUpdated && showCandidates) {
+            return true;
+        }
+    } while (candidatesUpdated);
+
+    return false;
 }
