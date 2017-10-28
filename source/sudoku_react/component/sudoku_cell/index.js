@@ -246,6 +246,7 @@ export default class SudokuCell extends React.PureComponent {
         }
         else if (error) {
             style.value.background = "#db4646";
+            style.candidate.background = "#db4646";
         }
 
         if (showCandidates && this.state.editionMode) {
