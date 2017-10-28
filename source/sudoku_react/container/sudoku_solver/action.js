@@ -12,37 +12,37 @@ import {
 } from "./constant";
 
 
-export function requestGridInitialisation(gridValues) {
+export function requestGridInitialisation(valueMapping) {
     return {
         type: REQUEST_GRID_INITIALISATION,
-        gridValues,
+        valueMapping,
     };
 }
 
 
-export function requestGridChange(gridValues, gridCandidates) {
+export function requestGridChange(valueMapping, candidateMapping) {
     return {
         type: REQUEST_GRID_CHANGE,
-        gridValues,
-        gridCandidates,
+        valueMapping,
+        candidateMapping,
     };
 }
 
 
-export function requestGridResolveAll(gridValues, gridCandidates) {
+export function requestGridResolveAll(valueMapping, candidateMapping) {
     return {
         type: REQUEST_GRID_RESOLVE_ALL,
-        gridValues,
-        gridCandidates,
+        valueMapping,
+        candidateMapping,
     };
 }
 
 
-export function requestGridResolveNext(gridValues, gridCandidates) {
+export function requestGridResolveNext(valueMapping, candidateMapping) {
     return {
         type: REQUEST_GRID_RESOLVE_NEXT,
-        gridValues,
-        gridCandidates,
+        valueMapping,
+        candidateMapping,
     };
 }
 

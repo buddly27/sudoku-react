@@ -22,9 +22,9 @@ import {
 } from "./action";
 
 import {
-    makeSelectGridInitialValues,
-    makeSelectGridValues,
-    makeSelectGridCandidates,
+    makeSelectInitialValueMapping,
+    makeSelectValueMapping,
+    makeSelectCandidateMapping,
     makeSelectErrorCells,
     makeSelectShowCandidates,
     makeSelectGridSolved,
@@ -39,9 +39,9 @@ export class SudokuSolver extends React.Component {
      * Expected types for *props*.
      */
     static propTypes = {
-        gridInitialValues: PropTypes.object.isRequired,
-        gridValues: PropTypes.object.isRequired,
-        gridCandidates: PropTypes.object.isRequired,
+        initialValueMapping: PropTypes.object.isRequired,
+        valueMapping: PropTypes.object.isRequired,
+        candidateMapping: PropTypes.object.isRequired,
         errorCells: PropTypes.array.isRequired,
         showCandidates: PropTypes.bool.isRequired,
         gridSolved: PropTypes.bool.isRequired,
@@ -54,14 +54,14 @@ export class SudokuSolver extends React.Component {
 
     /** Initiate the grid before mounting the component. */
     componentWillMount() {
-        this.props.requestGridInitialisation(this.props.gridInitialValues);
+        this.props.requestGridInitialisation(this.props.initialValueMapping);
     }
 
     render() {
         const {
-            gridInitialValues,
-            gridValues,
-            gridCandidates,
+            initialValueMapping,
+            valueMapping,
+            candidateMapping,
             errorCells,
             showCandidates,
             gridSolved,
@@ -76,43 +76,41 @@ export class SudokuSolver extends React.Component {
         };
 
         return (
-            <div>
-                <div style={style.container}>
-                    <SudokuGrid9X9
-                        {...combineGridMapping(gridValues, gridCandidates)}
-                        fixedCells={Object.keys(gridInitialValues)}
-                        errorCells={errorCells}
-                        showCandidates={showCandidates}
-                        onChange={
-                            (newGrid) => {
-                                const mapping = decanteGridMapping(newGrid);
-                                this.props.requestGridChange(
-                                    mapping.value, mapping.candidate,
-                                );
-                            }
+            <div style={style.container}>
+                <SudokuGrid9X9
+                    {...combineGridMapping(valueMapping, candidateMapping)}
+                    fixedCells={Object.keys(initialValueMapping)}
+                    errorCells={errorCells}
+                    showCandidates={showCandidates}
+                    onChange={
+                        (newGrid) => {
+                            const mapping = decanteGridMapping(newGrid);
+                            this.props.requestGridChange(
+                                mapping.value, mapping.candidate,
+                            );
                         }
-                    />
+                    }
+                />
 
-                    <SolverControlForm
-                        onShowCandidateToggle={this.props.requestShowCandidates}
-                        onGridReset={
-                            () => this.props.requestGridInitialisation(
-                                gridInitialValues
-                            )
-                        }
-                        onResolveNext={
-                            () => this.props.requestGridResolveNext(
-                                gridValues, gridCandidates
-                            )
-                        }
-                        onResolveAll={
-                            () => this.props.requestGridResolveAll(
-                                gridValues, gridCandidates
-                            )
-                        }
-                        resolveDisabled={errorCells.length > 0 || gridSolved}
-                    />
-                </div>
+                <SolverControlForm
+                    onShowCandidateToggle={this.props.requestShowCandidates}
+                    onGridReset={
+                        () => this.props.requestGridInitialisation(
+                            initialValueMapping
+                        )
+                    }
+                    onResolveNext={
+                        () => this.props.requestGridResolveNext(
+                            valueMapping, candidateMapping
+                        )
+                    }
+                    onResolveAll={
+                        () => this.props.requestGridResolveAll(
+                            valueMapping, candidateMapping
+                        )
+                    }
+                    resolveDisabled={errorCells.length > 0 || gridSolved}
+                />
             </div>
         );
     }
@@ -212,9 +210,9 @@ export function decanteGridMapping(dataMapping) {
 
 
 const mapStateToProps = createStructuredSelector({
-    gridInitialValues: makeSelectGridInitialValues(),
-    gridValues: makeSelectGridValues(),
-    gridCandidates: makeSelectGridCandidates(),
+    initialValueMapping: makeSelectInitialValueMapping(),
+    valueMapping: makeSelectValueMapping(),
+    candidateMapping: makeSelectCandidateMapping(),
     errorCells: makeSelectErrorCells(),
     showCandidates: makeSelectShowCandidates(),
     gridSolved: makeSelectGridSolved(),
@@ -223,14 +221,14 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
     return {
-        requestGridInitialisation: (gridValues) =>
-            dispatch(requestGridInitialisation(gridValues)),
-        requestGridChange: (gridValues, gridCandidates) =>
-            dispatch(requestGridChange(gridValues, gridCandidates)),
-        requestGridResolveAll: (gridValues, gridCandidates) =>
-            dispatch(requestGridResolveAll(gridValues, gridCandidates)),
-        requestGridResolveNext: (gridValues, gridCandidates) =>
-            dispatch(requestGridResolveNext(gridValues, gridCandidates)),
+        requestGridInitialisation: (valueMapping) =>
+            dispatch(requestGridInitialisation(valueMapping)),
+        requestGridChange: (valueMapping, candidateMapping) =>
+            dispatch(requestGridChange(valueMapping, candidateMapping)),
+        requestGridResolveAll: (valueMapping, candidateMapping) =>
+            dispatch(requestGridResolveAll(valueMapping, candidateMapping)),
+        requestGridResolveNext: (valueMapping, candidateMapping) =>
+            dispatch(requestGridResolveNext(valueMapping, candidateMapping)),
         requestShowCandidates: (checked) =>
             dispatch(requestShowCandidates(checked)),
     };

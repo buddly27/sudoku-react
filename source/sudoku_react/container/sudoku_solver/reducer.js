@@ -21,7 +21,7 @@ import {
  * Initiate state for the container component.
  */
 const INITIAL_STATE = fromJS({
-    gridInitialValues: {
+    initialValueMapping: {
         c00: 3,
         c10: 9, c11: 7, c14: 1,
         c20: 6, c23: 5, c24: 8, c25: 3,
@@ -32,8 +32,8 @@ const INITIAL_STATE = fromJS({
         c74: 9, c77: 5, c78: 6,
         c88: 1,
     },
-    gridValues: {},
-    gridCandidates: {},
+    valueMapping: {},
+    candidateMapping: {},
     errorCells: [],
     showCandidates: false,
     gridSolved: false,
@@ -47,28 +47,28 @@ export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case REQUEST_GRID_INITIALISATION:
             return state
-                .set("gridValues", fromJS(action.gridValues))
-                .set("gridCandidates", fromJS({}))
+                .set("valueMapping", fromJS(action.valueMapping))
+                .set("candidateMapping", fromJS({}))
                 .set("errorCells", fromJS([]))
                 .set("gridSolved", false);
         case REQUEST_GRID_CHANGE: {
             const grid = new SudokuGrid(
-                action.gridValues,
-                action.gridCandidates
+                action.valueMapping,
+                action.candidateMapping
             );
 
             const errorMapping = grid.validate();
 
             return state
-                .set("gridCandidates", fromJS(grid.toCandidateMapping()))
-                .set("gridValues", fromJS(grid.toValueMapping()))
+                .set("candidateMapping", fromJS(grid.toCandidateMapping()))
+                .set("valueMapping", fromJS(grid.toValueMapping()))
                 .set("errorCells", fromJS(Object.keys(errorMapping)))
                 .set("gridSolved", grid.isSolved());
         }
         case REQUEST_GRID_RESOLVE_ALL: {
             const grid = new SudokuGrid(
-                action.gridValues,
-                action.gridCandidates
+                action.valueMapping,
+                action.candidateMapping
             );
             const solver = new SudokuSolver();
 
@@ -88,14 +88,14 @@ export default function reducer(state = INITIAL_STATE, action) {
 
             return state
                 .set("errorCells", fromJS(errorCells))
-                .set("gridValues", fromJS(grid.toValueMapping()))
-                .set("gridCandidates", fromJS(grid.toCandidateMapping()))
+                .set("valueMapping", fromJS(grid.toValueMapping()))
+                .set("candidateMapping", fromJS(grid.toCandidateMapping()))
                 .set("gridSolved", gridSolved);
         }
         case REQUEST_GRID_RESOLVE_NEXT: {
             const grid = new SudokuGrid(
-                action.gridValues,
-                action.gridCandidates
+                action.valueMapping,
+                action.candidateMapping
             );
 
             let errorCells = [];
@@ -125,8 +125,8 @@ export default function reducer(state = INITIAL_STATE, action) {
 
             return state
                 .set("errorCells", fromJS(errorCells))
-                .set("gridValues", fromJS(grid.toValueMapping()))
-                .set("gridCandidates", fromJS(grid.toCandidateMapping()))
+                .set("valueMapping", fromJS(grid.toValueMapping()))
+                .set("candidateMapping", fromJS(grid.toCandidateMapping()))
                 .set("gridSolved", grid.isSolved());
         }
         case REQUEST_SHOW_CANDIDATES:
