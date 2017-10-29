@@ -257,7 +257,6 @@ export default class SudokuCell extends React.PureComponent {
                     <textarea
                         autoFocus // eslint-disable-line jsx-a11y/no-autofocus
                         style={style.candidateEditor}
-                        onFocus={() => this.setState({editionMode: true})}
                         onBlur={() => this.setState({editionMode: false})}
                         onChange={
                             (event) => this.onCandidatesChange(
@@ -285,9 +284,6 @@ export default class SudokuCell extends React.PureComponent {
                                 }
                                 onFocus={
                                     () => this.setState({editionMode: true})
-                                }
-                                onBlur={
-                                    () => this.setState({editionMode: false})
                                 }
                                 readOnly
                             />
