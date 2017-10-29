@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Button from "material-ui/Button";
 import {FormControlLabel, FormGroup} from "material-ui/Form";
 import Switch from "material-ui/Switch";
+
+import ActionButton from "./button";
 
 
 const SolverControlForm = (props) => {
@@ -35,26 +36,20 @@ const SolverControlForm = (props) => {
                     }
                     label="Show Candidates"
                 />
-                <Button
-                    color="primary"
+                <ActionButton
+                    message="Reset"
                     onClick={onGridReset}
-                >
-                    Reset
-                </Button>
-                <Button
-                    color="primary"
+                />
+                <ActionButton
+                    message="Resolve Next"
                     disabled={resolveDisabled}
                     onClick={onResolveNext}
-                >
-                    Resolve Next
-                </Button>
-                <Button
-                    color="primary"
+                />
+                <ActionButton
+                    message="Resolve All"
                     disabled={resolveDisabled}
                     onClick={onResolveAll}
-                >
-                    Resolve All
-                </Button>
+                />
             </FormGroup>
         </div>
     );
