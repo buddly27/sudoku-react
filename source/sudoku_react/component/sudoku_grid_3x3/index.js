@@ -69,7 +69,7 @@ const SudokuGrid3X3 = (props) => {
     const {fixedCells, errorCells, showCandidates, onChange} = props;
     const {c00, c01, c02, c10, c11, c12, c20, c21, c22} = props;
 
-    const block = {c00, c01, c02, c10, c11, c12, c20, c21, c22};
+    const grid = {c00, c01, c02, c10, c11, c12, c20, c21, c22};
 
     return (
         <StyledColumn>
@@ -80,8 +80,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c00") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c00: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c00: data})
                         )
                     }
                 />
@@ -91,8 +91,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c01") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c01: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c01: data})
                         )
                     }
                 />
@@ -102,8 +102,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c02") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c02: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c02: data})
                         )
                     }
                 />
@@ -115,8 +115,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c10") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c10: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c10: data})
                         )
                     }
                 />
@@ -126,8 +126,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c11") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c11: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c11: data})
                         )
                     }
                 />
@@ -137,8 +137,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c12") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c12: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c12: data})
                         )
                     }
                 />
@@ -150,8 +150,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c20") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c20: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c20: data})
                         )
                     }
                 />
@@ -161,8 +161,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c21") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c21: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c21: data})
                         )
                     }
                 />
@@ -172,8 +172,8 @@ const SudokuGrid3X3 = (props) => {
                     error={errorCells.indexOf("c22") !== -1}
                     showCandidates={showCandidates}
                     onChange={
-                        (value) => onChange(
-                            Object.assign({}, block, {c22: value})
+                        (data) => onChange(
+                            Object.assign({}, grid, {c22: data})
                         )
                     }
                 />
@@ -216,6 +216,9 @@ SudokuGrid3X3.defaultProps = {
     c20: [1, 2, 3, 4, 5, 6, 7, 8],
     c21: [1, 2, 3, 4, 5, 6, 7, 8],
     c22: [1, 2, 3, 4, 5, 6, 7, 8],
+    fixedCells: [],
+    errorCells: [],
+    showCandidates: false,
 };
 
 
