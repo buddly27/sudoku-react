@@ -57,6 +57,7 @@ export class SudokuSolver extends React.Component {
         this.props.requestGridInitialisation(this.props.initialValueMapping);
     }
 
+    /** Render the component. */
     render() {
         const {
             initialValueMapping,
