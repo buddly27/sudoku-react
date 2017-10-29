@@ -72,6 +72,7 @@ export default class SudokuCell extends React.PureComponent {
         showCandidates: false,
     };
 
+    /** Create the component with local states. */
     constructor(props) {
         super(props);
         this.state = {
@@ -180,6 +181,7 @@ export default class SudokuCell extends React.PureComponent {
         }
     };
 
+    /** Render the component. */
     render() {
         const {
             fixed,
