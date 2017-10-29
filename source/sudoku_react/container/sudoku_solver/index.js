@@ -72,6 +72,7 @@ export class SudokuSolver extends React.Component {
                 paddingTop: 50,
                 display: "flex",
                 flexWrap: "wrap",
+                justifyContent: "center",
             },
         };
 

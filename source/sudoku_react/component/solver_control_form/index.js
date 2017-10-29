@@ -18,7 +18,7 @@ const SolverControlForm = (props) => {
 
     const style = {
         container: {
-            padding: 10,
+            padding: 30,
         },
     };
 
