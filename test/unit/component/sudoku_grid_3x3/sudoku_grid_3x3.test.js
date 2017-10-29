@@ -62,7 +62,6 @@ describe("<SudokuGrid3X3 />", () => {
 
         const cells = renderedComponent.find("SudokuCell");
         cells.forEach((node, index) => {
-            expect(node.prop("data")).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
             node.prop("onChange")(5);
 
             expect(onChangeSpy).toHaveBeenLastCalledWith(

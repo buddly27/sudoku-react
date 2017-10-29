@@ -1,10 +1,10 @@
 /* eslint-disable object-property-newline */
 
 import React from "react";
-import {mount, shallow} from "enzyme";
+import {mount} from "enzyme";
 
 import SudokuGrid9X9, {
-    mapFixedBlock,
+    mapIdentifiersToBlock,
     copyBlocks,
 } from "sudoku_react/component/sudoku_grid_9x9";
 
@@ -15,98 +15,198 @@ const renderComponent = (props) => mount(
 
 
 describe("<SudokuGrid9X9 />", () => {
-    it("should render 81 empty <input> tags", () => {
-        const renderedComponent = renderComponent({
-            fixedCells: [],
-            onChange: () => {},
+    it("should render 9 SudokuGrid3X3 components", () => {
+        const renderedComponent = renderComponent({onChange: () => {}});
+        const blocks = renderedComponent.find("SudokuGrid3X3");
+        expect(blocks.length).toEqual(9);
+        blocks.forEach((node) => {
+            expect(node.prop("c00")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c01")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c02")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c00")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c01")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c02")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c00")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c01")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            expect(node.prop("c02")).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         });
-        const inputs = renderedComponent.find("input");
-        expect(inputs.length).toEqual(81);
-        inputs.forEach((input) =>
-            expect(input.prop("value")).toEqual("")
-        );
     });
-    it("should render 81 <input> tags filled with a number", () => {
+
+    it("should render 9 SudokuGrid3X3 filled with data", () => {
         const renderedComponent = renderComponent({
-            c00: 1, c01: 2, c02: 3, c03: 4, c04: 5, c05: 6, c06: 7, c07: 8, c08: 9,
-            c10: 1, c11: 2, c12: 3, c13: 4, c14: 5, c15: 6, c16: 7, c17: 8, c18: 9,
-            c20: 1, c21: 2, c22: 3, c23: 4, c24: 5, c25: 6, c26: 7, c27: 8, c28: 9,
-            c30: 1, c31: 2, c32: 3, c33: 4, c34: 5, c35: 6, c36: 7, c37: 8, c38: 9,
-            c40: 1, c41: 2, c42: 3, c43: 4, c44: 5, c45: 6, c46: 7, c47: 8, c48: 9,
-            c50: 1, c51: 2, c52: 3, c53: 4, c54: 5, c55: 6, c56: 7, c57: 8, c58: 9,
-            c60: 1, c61: 2, c62: 3, c63: 4, c64: 5, c65: 6, c66: 7, c67: 8, c68: 9,
-            c70: 1, c71: 2, c72: 3, c73: 4, c74: 5, c75: 6, c76: 7, c77: 8, c78: 9,
-            c80: 1, c81: 2, c82: 3, c83: 4, c84: 5, c85: 6, c86: 7, c87: 8, c88: 9,
+            c00: 1, c01: 2, c02: 3, c03: 4, c04: 5, c05: 6, c06: 7, c07: 8,
+            c08: 9,
+            c10: 1, c11: 2, c12: 3, c13: 4, c14: 5, c15: 6, c16: 7, c17: 8,
+            c18: 9,
+            c20: 1, c21: 2, c22: 3, c23: 4, c24: 5, c25: 6, c26: 7, c27: 8,
+            c28: 9,
+            c30: 1, c31: 2, c32: 3, c33: 4, c34: 5, c35: 6, c36: 7, c37: 8,
+            c38: 9,
+            c40: 1, c41: 2, c42: 3, c43: 4, c44: 5, c45: 6, c46: 7, c47: 8,
+            c48: 9,
+            c50: 1, c51: 2, c52: 3, c53: 4, c54: 5, c55: 6, c56: 7, c57: 8,
+            c58: 9,
+            c60: 1, c61: 2, c62: 3, c63: 4, c64: 5, c65: 6, c66: 7, c67: 8,
+            c68: 9,
+            c70: 1, c71: 2, c72: 3, c73: 4, c74: 5, c75: 6, c76: 7, c77: 8,
+            c78: 9,
+            c80: 1, c81: 2, c82: 3, c83: 4, c84: 5, c85: 6, c86: 7, c87: 8,
+            c88: 9,
             fixedCells: [],
             onChange: () => {},
         });
 
-        const inputValues = [
-            1, 2, 3, 1, 2, 3, 1, 2, 3,
-            4, 5, 6, 4, 5, 6, 4, 5, 6,
-            7, 8, 9, 7, 8, 9, 7, 8, 9,
-            1, 2, 3, 1, 2, 3, 1, 2, 3,
-            4, 5, 6, 4, 5, 6, 4, 5, 6,
-            7, 8, 9, 7, 8, 9, 7, 8, 9,
-            1, 2, 3, 1, 2, 3, 1, 2, 3,
-            4, 5, 6, 4, 5, 6, 4, 5, 6,
-            7, 8, 9, 7, 8, 9, 7, 8, 9,
+        const expected = [
+            [1, 2, 3, 1, 2, 3, 1, 2, 3],
+            [4, 5, 6, 4, 5, 6, 4, 5, 6],
+            [7, 8, 9, 7, 8, 9, 7, 8, 9],
+            [1, 2, 3, 1, 2, 3, 1, 2, 3],
+            [4, 5, 6, 4, 5, 6, 4, 5, 6],
+            [7, 8, 9, 7, 8, 9, 7, 8, 9],
+            [1, 2, 3, 1, 2, 3, 1, 2, 3],
+            [4, 5, 6, 4, 5, 6, 4, 5, 6],
+            [7, 8, 9, 7, 8, 9, 7, 8, 9],
         ];
 
-        const inputs = renderedComponent.find("input");
-        expect(inputs.length).toEqual(81);
-        inputs.forEach((input, index) => {
-            expect(input.prop("value")).toEqual(inputValues[index]);
+        const blocks = renderedComponent.find("SudokuGrid3X3");
+        blocks.forEach((node, index) => {
+            expect(node.prop("c00")).toEqual(expected[index][0]);
+            expect(node.prop("c01")).toEqual(expected[index][1]);
+            expect(node.prop("c02")).toEqual(expected[index][2]);
+            expect(node.prop("c00")).toEqual(expected[index][3]);
+            expect(node.prop("c01")).toEqual(expected[index][4]);
+            expect(node.prop("c02")).toEqual(expected[index][5]);
+            expect(node.prop("c00")).toEqual(expected[index][6]);
+            expect(node.prop("c01")).toEqual(expected[index][7]);
+            expect(node.prop("c02")).toEqual(expected[index][8]);
         });
     });
-    it("should update a cell of the grid", () => {
+
+    it("should update a block of the grid", () => {
         const onChangeSpy = jest.fn();
-        const renderedComponent = renderComponent({
-            fixedCells: [],
-            onChange: onChangeSpy,
-        });
+        const renderedComponent = renderComponent({onChange: onChangeSpy});
 
-        const input = shallow(renderedComponent.find("input").get(0));
-
-        expect(input.prop("value")).toEqual("");
-
-        const inputs = renderedComponent.find("input");
-        inputs.forEach((_input) => {
-            _input.simulate("keydown", {key: "8"});
-        });
-
-        expect(onChangeSpy).toHaveBeenCalledTimes(81);
+        const identifiers = [
+            ["c00", "c01", "c02", "c10", "c11", "c12", "c20", "c21", "c22"],
+            ["c03", "c04", "c05", "c13", "c14", "c15", "c23", "c24", "c25"],
+            ["c06", "c07", "c08", "c16", "c17", "c18", "c26", "c27", "c28"],
+            ["c30", "c31", "c32", "c40", "c41", "c42", "c50", "c51", "c52"],
+            ["c33", "c34", "c35", "c43", "c44", "c45", "c53", "c54", "c55"],
+            ["c36", "c37", "c38", "c46", "c47", "c48", "c56", "c57", "c58"],
+            ["c60", "c61", "c62", "c70", "c71", "c72", "c80", "c81", "c82"],
+            ["c63", "c64", "c65", "c73", "c74", "c75", "c83", "c84", "c85"],
+            ["c66", "c67", "c68", "c76", "c77", "c78", "c86", "c87", "c88"],
+        ];
 
         const grid = {
-            c00: 0, c01: 0, c02: 0, c03: 0, c04: 0, c05: 0, c06: 0, c07: 0, c08: 0,
-            c10: 0, c11: 0, c12: 0, c13: 0, c14: 0, c15: 0, c16: 0, c17: 0, c18: 0,
-            c20: 0, c21: 0, c22: 0, c23: 0, c24: 0, c25: 0, c26: 0, c27: 0, c28: 0,
-            c30: 0, c31: 0, c32: 0, c33: 0, c34: 0, c35: 0, c36: 0, c37: 0, c38: 0,
-            c40: 0, c41: 0, c42: 0, c43: 0, c44: 0, c45: 0, c46: 0, c47: 0, c48: 0,
-            c50: 0, c51: 0, c52: 0, c53: 0, c54: 0, c55: 0, c56: 0, c57: 0, c58: 0,
-            c60: 0, c61: 0, c62: 0, c63: 0, c64: 0, c65: 0, c66: 0, c67: 0, c68: 0,
-            c70: 0, c71: 0, c72: 0, c73: 0, c74: 0, c75: 0, c76: 0, c77: 0, c78: 0,
-            c80: 0, c81: 0, c82: 0, c83: 0, c84: 0, c85: 0, c86: 0, c87: 0, c88: 0,
+            c00: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c01: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c02: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c03: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c04: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c05: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c06: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c07: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c08: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c10: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c11: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c12: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c13: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c14: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c15: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c16: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c17: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c18: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c20: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c21: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c22: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c23: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c24: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c25: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c26: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c27: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c28: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c30: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c31: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c32: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c33: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c34: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c35: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c36: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c37: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c38: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c40: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c41: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c42: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c43: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c44: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c45: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c46: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c47: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c48: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c50: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c51: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c52: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c53: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c54: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c55: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c56: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c57: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c58: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c60: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c61: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c62: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c63: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c64: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c65: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c66: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c67: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c68: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c70: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c71: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c72: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c73: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c74: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c75: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c76: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c77: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c78: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c80: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c81: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c82: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c83: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c84: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c85: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c86: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c87: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            c88: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         };
 
-        const keys = [
-            "c00", "c01", "c02", "c10", "c11", "c12", "c20", "c21", "c22",
-            "c03", "c04", "c05", "c13", "c14", "c15", "c23", "c24", "c25",
-            "c06", "c07", "c08", "c16", "c17", "c18", "c26", "c27", "c28",
-            "c30", "c31", "c32", "c40", "c41", "c42", "c50", "c51", "c52",
-            "c33", "c34", "c35", "c43", "c44", "c45", "c53", "c54", "c55",
-            "c36", "c37", "c38", "c46", "c47", "c48", "c56", "c57", "c58",
-            "c60", "c61", "c62", "c70", "c71", "c72", "c80", "c81", "c82",
-            "c63", "c64", "c65", "c73", "c74", "c75", "c83", "c84", "c85",
-            "c66", "c67", "c68", "c76", "c77", "c78", "c86", "c87", "c88",
-        ];
+        const blocks = renderedComponent.find("SudokuGrid3X3");
+        blocks.forEach((node, index) => {
+            node.prop("onChange")({
+                c00: 1, c01: 2, c02: 3,
+                c10: 4, c11: 5, c12: 6,
+                c20: 7, c21: 8, c22: 9,
+            });
 
-        const expected = keys.map(
-            (key) => [Object.assign({}, grid, {[key]: 8})]
-        );
-        expect(onChangeSpy.mock.calls).toEqual(expected);
+            expect(onChangeSpy).toHaveBeenLastCalledWith(
+                Object.assign({}, grid, {
+                    [identifiers[index][0]]: 1,
+                    [identifiers[index][1]]: 2,
+                    [identifiers[index][2]]: 3,
+                    [identifiers[index][3]]: 4,
+                    [identifiers[index][4]]: 5,
+                    [identifiers[index][5]]: 6,
+                    [identifiers[index][6]]: 7,
+                    [identifiers[index][7]]: 8,
+                    [identifiers[index][8]]: 9,
+                })
+            );
+        });
     });
-    it("should create the fixed blocks mapping", () => {
+
+    it("should create the blocks mapping", () => {
         const expected = {
             b00: ["c10", "c11", "c21"],
             b01: ["c00", "c02", "c22"],
@@ -120,7 +220,7 @@ describe("<SudokuGrid9X9 />", () => {
         };
 
         expect(
-            mapFixedBlock([
+            mapIdentifiersToBlock([
                 "c03", "c05",
                 "c10", "c11", "c16", "c17",
                 "c21", "c25", "c26",
@@ -133,6 +233,7 @@ describe("<SudokuGrid9X9 />", () => {
             ])
         ).toEqual(expected);
     });
+
     it("should copy a block while updating some elements and avoid mutating original object", () => {
         const origin = {
             b00: {c00: 1, c01: 2, c02: 3, c10: 4, c11: 5, c12: 6, c20: 7, c21: 8, c22: 9},

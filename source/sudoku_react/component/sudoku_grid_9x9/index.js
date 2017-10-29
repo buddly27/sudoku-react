@@ -648,6 +648,9 @@ SudokuGrid9X9.defaultProps = {
     c86: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     c87: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     c88: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    fixedCells: [],
+    errorCells: [],
+    showCandidates: false,
 };
 
 
