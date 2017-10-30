@@ -1,14 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import {FormControlLabel, FormGroup} from "material-ui/Form";
-import Switch from "material-ui/Switch";
+import {FormGroup} from "material-ui/Form";
 
 import ActionButton from "./button";
+import OptionSwitch from "./switch";
+import GridSelector from "./selector";
 
 
 const SolverControlForm = (props) => {
     const {
+        gridName,
+        gridOptions,
+        onGridChange,
         onShowCandidateToggle,
         onGridReset,
         onResolveNext,
@@ -25,28 +29,26 @@ const SolverControlForm = (props) => {
     return (
         <div style={style.container}>
             <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            onChange={
-                                (event, checked) =>
-                                    onShowCandidateToggle(checked)
-                            }
-                        />
-                    }
+                <GridSelector
+                    value={gridName}
+                    options={gridOptions}
+                    onChange={onGridChange}
+                />
+                <OptionSwitch
+                    onToggle={onShowCandidateToggle}
                     label="Show Candidates"
                 />
                 <ActionButton
-                    message="Reset"
+                    label="Reset"
                     onClick={onGridReset}
                 />
                 <ActionButton
-                    message="Resolve Next"
+                    label="Resolve Next"
                     disabled={resolveDisabled}
                     onClick={onResolveNext}
                 />
                 <ActionButton
-                    message="Resolve All"
+                    label="Resolve All"
                     disabled={resolveDisabled}
                     onClick={onResolveAll}
                 />
@@ -60,6 +62,9 @@ const SolverControlForm = (props) => {
  * Expected types for *props*.
  */
 SolverControlForm.propTypes = {
+    gridName: PropTypes.string.isRequired,
+    gridOptions: PropTypes.array.isRequired,
+    onGridChange: PropTypes.func.isRequired,
     onShowCandidateToggle: PropTypes.func.isRequired,
     onGridReset: PropTypes.func.isRequired,
     onResolveNext: PropTypes.func.isRequired,

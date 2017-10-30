@@ -5,14 +5,14 @@ import Button from "material-ui/Button";
 
 
 const ActionButton = (props) => {
-    const {message, disabled, onClick} = props;
+    const {label, disabled, onClick} = props;
     return (
         <Button
             color="primary"
             disabled={disabled}
             onClick={onClick}
         >
-            {message}
+            {label}
         </Button>
     );
 };
@@ -22,7 +22,7 @@ const ActionButton = (props) => {
  * Expected types for *props*.
  */
 ActionButton.propTypes = {
-    message: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func.isRequired,
 };

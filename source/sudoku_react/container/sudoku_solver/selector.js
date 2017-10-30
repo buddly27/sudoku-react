@@ -13,11 +13,20 @@ const selectSudokuSolver = (state) => state.get("sudoku_solver");
 
 
 /**
- * Select the initialValueMapping state.
+ * Select the gridName state.
  */
-export const makeSelectInitialValueMapping = () => createSelector(
+export const makeSelectGridName = () => createSelector(
     selectSudokuSolver,
-    (state) => state.get("initialValueMapping").toJS()
+    (state) => state.get("gridName")
+);
+
+
+/**
+ * Select the grids state.
+ */
+export const makeSelectGrids = () => createSelector(
+    selectSudokuSolver,
+    (state) => state.get("grids").toJS()
 );
 
 

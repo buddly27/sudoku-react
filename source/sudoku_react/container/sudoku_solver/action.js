@@ -4,6 +4,7 @@
  */
 
 import {
+    REQUEST_NEW_GRID,
     REQUEST_GRID_INITIALISATION,
     REQUEST_GRID_CHANGE,
     REQUEST_GRID_RESOLVE_ALL,
@@ -12,10 +13,17 @@ import {
 } from "./constant";
 
 
-export function requestGridInitialisation(valueMapping) {
+export function requestNewGrid(gridName) {
+    return {
+        type: REQUEST_NEW_GRID,
+        gridName,
+    };
+}
+
+
+export function requestGridInitialisation() {
     return {
         type: REQUEST_GRID_INITIALISATION,
-        valueMapping,
     };
 }
 

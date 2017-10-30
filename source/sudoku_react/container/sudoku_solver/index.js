@@ -14,6 +14,7 @@ import SudokuGrid9X9 from "sudoku_react/component/sudoku_grid_9x9";
 import SolverControlForm from "sudoku_react/component/solver_control_form";
 
 import {
+    requestNewGrid,
     requestGridInitialisation,
     requestGridChange,
     requestGridResolveAll,
@@ -22,7 +23,8 @@ import {
 } from "./action";
 
 import {
-    makeSelectInitialValueMapping,
+    makeSelectGridName,
+    makeSelectGrids,
     makeSelectValueMapping,
     makeSelectCandidateMapping,
     makeSelectErrorCells,
@@ -39,12 +41,14 @@ export class SudokuSolver extends React.Component {
      * Expected types for *props*.
      */
     static propTypes = {
-        initialValueMapping: PropTypes.object.isRequired,
+        gridName: PropTypes.string.isRequired,
+        grids: PropTypes.object.isRequired,
         valueMapping: PropTypes.object.isRequired,
         candidateMapping: PropTypes.object.isRequired,
         errorCells: PropTypes.array.isRequired,
         showCandidates: PropTypes.bool.isRequired,
         gridSolved: PropTypes.bool.isRequired,
+        requestNewGrid: PropTypes.func.isRequired,
         requestGridInitialisation: PropTypes.func.isRequired,
         requestGridChange: PropTypes.func.isRequired,
         requestGridResolveAll: PropTypes.func.isRequired,
@@ -54,13 +58,14 @@ export class SudokuSolver extends React.Component {
 
     /** Initiate the grid before mounting the component. */
     componentWillMount() {
-        this.props.requestGridInitialisation(this.props.initialValueMapping);
+        this.props.requestGridInitialisation();
     }
 
     /** Render the component. */
     render() {
         const {
-            initialValueMapping,
+            gridName,
+            grids,
             valueMapping,
             candidateMapping,
             errorCells,
@@ -81,7 +86,7 @@ export class SudokuSolver extends React.Component {
             <div style={style.container}>
                 <SudokuGrid9X9
                     {...combineGridMapping(valueMapping, candidateMapping)}
-                    fixedCells={Object.keys(initialValueMapping)}
+                    fixedCells={Object.keys(grids[gridName])}
                     errorCells={errorCells}
                     showCandidates={showCandidates}
                     onChange={
@@ -95,11 +100,12 @@ export class SudokuSolver extends React.Component {
                 />
 
                 <SolverControlForm
+                    gridName={gridName}
+                    gridOptions={Object.keys(grids)}
+                    onGridChange={this.props.requestNewGrid}
                     onShowCandidateToggle={this.props.requestShowCandidates}
                     onGridReset={
-                        () => this.props.requestGridInitialisation(
-                            initialValueMapping
-                        )
+                        () => this.props.requestGridInitialisation()
                     }
                     onResolveNext={
                         () => this.props.requestGridResolveNext(
@@ -212,7 +218,8 @@ export function decanteGridMapping(dataMapping) {
 
 
 const mapStateToProps = createStructuredSelector({
-    initialValueMapping: makeSelectInitialValueMapping(),
+    gridName: makeSelectGridName(),
+    grids: makeSelectGrids(),
     valueMapping: makeSelectValueMapping(),
     candidateMapping: makeSelectCandidateMapping(),
     errorCells: makeSelectErrorCells(),
@@ -223,8 +230,9 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
     return {
-        requestGridInitialisation: (valueMapping) =>
-            dispatch(requestGridInitialisation(valueMapping)),
+        requestNewGrid: (gridName) =>
+            dispatch(requestNewGrid(gridName)),
+        requestGridInitialisation: () => dispatch(requestGridInitialisation()),
         requestGridChange: (valueMapping, candidateMapping) =>
             dispatch(requestGridChange(valueMapping, candidateMapping)),
         requestGridResolveAll: (valueMapping, candidateMapping) =>
