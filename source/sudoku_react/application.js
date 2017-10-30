@@ -14,7 +14,7 @@ import {install} from "offline-plugin/runtime";
 import "sanitize.css/sanitize.css";
 import "typeface-roboto/index.css";
 
-import {MuiThemeProvider} from "material-ui/styles";
+import {MuiThemeProvider, createMuiTheme} from "material-ui/styles";
 
 import App from "sudoku_react/container/application";
 import LanguageProvider from "sudoku_react/container/language_provider";
@@ -24,6 +24,12 @@ import configureStore from "sudoku_react/store";
 import {TRANSLATION_MESSAGES} from "sudoku_react/i18n";
 
 import "./global_style";
+
+
+/**
+ * Theme of the application.
+ */
+const THEME = createMuiTheme();
 
 
 /**
@@ -77,7 +83,7 @@ const ROOT_ROUTE = {
  */
 const render = (messages) => {
     ReactDOM.render(
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={THEME}>
             <Provider store={STORE}>
                 <LanguageProvider messages={messages}>
                     <Router
