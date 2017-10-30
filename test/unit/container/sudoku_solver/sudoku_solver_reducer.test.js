@@ -5,7 +5,6 @@ import {fromJS} from "immutable";
 import reducer from "sudoku_react/container/sudoku_solver/reducer";
 
 import {
-    requestGridInitialisation,
     requestGridChange,
 } from "sudoku_react/container/sudoku_solver/action";
 
@@ -32,16 +31,51 @@ describe("reducer", () => {
         expect(
             reducer(undefined, {})
         ).toEqual(fromJS({
-            initialValueMapping: {
-                c00: 3,
-                c10: 9, c11: 7, c14: 1,
-                c20: 6, c23: 5, c24: 8, c25: 3,
-                c30: 2, c36: 9,
-                c40: 5, c43: 6, c44: 2, c45: 1, c48: 3,
-                c52: 8, c58: 5,
-                c63: 4, c64: 3, c65: 5, c68: 2,
-                c74: 9, c77: 5, c78: 6,
-                c88: 1,
+            gridName: "Example 1",
+            grids: {
+                "Example 1": {
+                    c00: 3,
+                    c10: 9, c11: 7, c14: 1,
+                    c20: 6, c23: 5, c24: 8, c25: 3,
+                    c30: 2, c36: 9,
+                    c40: 5, c43: 6, c44: 2, c45: 1, c48: 3,
+                    c52: 8, c58: 5,
+                    c63: 4, c64: 3, c65: 5, c68: 2,
+                    c74: 9, c77: 5, c78: 6,
+                    c88: 1,
+                },
+                "Example 2": {
+                    c01: 2, c03: 6, c05: 8,
+                    c10: 5, c11: 8, c15: 9, c16: 7,
+                    c24: 4,
+                    c30: 3, c31: 7, c36: 5,
+                    c40: 6, c48: 4,
+                    c52: 8, c57: 1, c58: 3,
+                    c64: 2,
+                    c72: 9, c73: 8, c77: 3, c78: 6,
+                    c83: 3, c85: 6, c87: 9,
+                },
+                "Example 3": {
+                    c03: 2, c07: 6, c08: 3,
+                    c10: 3, c15: 5, c16: 4, c18: 1,
+                    c22: 1, c25: 3, c26: 9, c27: 8,
+                    c37: 9,
+                    c43: 5, c44: 3, c45: 8,
+                    c51: 3,
+                    c61: 2, c62: 6, c63: 3, c66: 5,
+                    c70: 5, c72: 3, c73: 7, c78: 8,
+                    c80: 4, c81: 7, c85: 1,
+                },
+                "Example 4": {
+                    c03: 6, c06: 4,
+                    c10: 7, c15: 3, c16: 6,
+                    c24: 9, c25: 1, c27: 8,
+                    c41: 5, c43: 1, c44: 8, c48: 3,
+                    c53: 3, c55: 6, c57: 4, c58: 5,
+                    c61: 4, c63: 2, c67: 6,
+                    c70: 9, c72: 3,
+                    c81: 2, c86: 1,
+                },
             },
             valueMapping: {},
             candidateMapping: {},
@@ -53,40 +87,6 @@ describe("reducer", () => {
 
     it("should handle an action with no type", () => {
         expect(reducer(state, {})).toEqual(state);
-    });
-
-    it("should handle the requestGridInitialisation action correctly", () => {
-        const valueMapping = {
-            c03: 1, c05: 5,
-            c10: 1, c11: 4, c16: 6, c17: 7,
-            c21: 8, c25: 2, c26: 4,
-            c31: 6, c32: 3, c34: 7, c37: 1,
-            c40: 9, c48: 3,
-            c51: 1, c54: 9, c56: 5, c57: 2,
-            c62: 7, c63: 2, c67: 8,
-            c71: 2, c72: 6, c77: 3, c78: 5,
-            c83: 4, c85: 9,
-        };
-
-        expect(
-            reducer(state, requestGridInitialisation(valueMapping))
-        ).toEqual(
-            state
-                .set("valueMapping", fromJS({
-                    c03: 1, c05: 5,
-                    c10: 1, c11: 4, c16: 6, c17: 7,
-                    c21: 8, c25: 2, c26: 4,
-                    c31: 6, c32: 3, c34: 7, c37: 1,
-                    c40: 9, c48: 3,
-                    c51: 1, c54: 9, c56: 5, c57: 2,
-                    c62: 7, c63: 2, c67: 8,
-                    c71: 2, c72: 6, c77: 3, c78: 5,
-                    c83: 4, c85: 9,
-                }))
-                .set("candidateMapping", fromJS({}))
-                .set("errorCells", fromJS([]))
-                .set("gridSolved", false)
-        );
     });
 
     it("should handle the requestGridChange action correctly", () => {

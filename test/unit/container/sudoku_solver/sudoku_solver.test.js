@@ -19,6 +19,7 @@ import {
 
 describe("<SudokuSolver />", () => {
     it("should render the home container", () => {
+        const requestNewGridSpy = jest.fn();
         const requestGridInitialisationSpy = jest.fn();
         const requestGridChangeSpy = jest.fn();
         const requestGridResolveAllSpy = jest.fn();
@@ -27,22 +28,26 @@ describe("<SudokuSolver />", () => {
 
         const renderedComponent = mount(
             <SudokuSolver
-                initialValueMapping={{
-                    c03: 1, c05: 5,
-                    c10: 1, c11: 4, c16: 6, c17: 7,
-                    c21: 8, c25: 2, c26: 4,
-                    c31: 6, c32: 3, c34: 7, c37: 1,
-                    c40: 9, c48: 3,
-                    c51: 1, c54: 9, c56: 5, c57: 2,
-                    c62: 7, c63: 2, c67: 8,
-                    c71: 2, c72: 6, c77: 3, c78: 5,
-                    c83: 4, c85: 9,
+                gridName="Example 1"
+                grids={{
+                    "Example 1": {
+                        c03: 1, c05: 5,
+                        c10: 1, c11: 4, c16: 6, c17: 7,
+                        c21: 8, c25: 2, c26: 4,
+                        c31: 6, c32: 3, c34: 7, c37: 1,
+                        c40: 9, c48: 3,
+                        c51: 1, c54: 9, c56: 5, c57: 2,
+                        c62: 7, c63: 2, c67: 8,
+                        c71: 2, c72: 6, c77: 3, c78: 5,
+                        c83: 4, c85: 9,
+                    },
                 }}
                 valueMapping={{}}
                 candidateMapping={{}}
                 errorCells={[]}
                 showCandidates={false}
                 gridSolved={false}
+                requestNewGrid={requestNewGridSpy}
                 requestGridInitialisation={requestGridInitialisationSpy}
                 requestGridChange={requestGridChangeSpy}
                 requestGridResolveAll={requestGridResolveAllSpy}

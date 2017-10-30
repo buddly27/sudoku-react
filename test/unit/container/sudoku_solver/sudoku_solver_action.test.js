@@ -19,23 +19,10 @@ import {
 
 describe("actions", () => {
     it("should create an action to initiate the grid", () => {
-        const valueMapping = {
-            c00: 3,
-            c10: 9, c11: 7, c14: 1,
-            c20: 6, c23: 5, c24: 8, c25: 3,
-            c30: 2, c36: 9,
-            c40: 5, c43: 6, c44: 2, c45: 1, c48: 3,
-            c52: 8, c58: 5,
-            c63: 4, c64: 3, c65: 5, c68: 2,
-            c74: 9, c77: 5, c78: 6,
-            c88: 1,
-        };
-
         const expectedAction = {
             type: REQUEST_GRID_INITIALISATION,
-            valueMapping,
         };
-        expect(requestGridInitialisation(valueMapping)).toEqual(expectedAction);
+        expect(requestGridInitialisation()).toEqual(expectedAction);
     });
 
     it("should create an action to update the grid", () => {
