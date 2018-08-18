@@ -7,7 +7,8 @@
         "url": "https://github.com/buddly27/sudoku-react.git"
     },
     "engines": {
-        "node": "10.9.0"
+        "node": "10.9.0",
+        "npm": "6.2.0"
     },
     "author": "Jeremy Retailleau",
     "license": "MIT",
