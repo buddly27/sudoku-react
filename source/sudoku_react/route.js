@@ -28,7 +28,7 @@ export default function createRoutes(store) {
 
     return [
         {
-            path: "/solver",
+            path: "/",
             name: "solver",
             getComponent(nextState, cb) {
                 const importModules = Promise.all([
